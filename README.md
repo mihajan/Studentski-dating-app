@@ -1,4 +1,4 @@
-# Študentski dading app 
+# Študentski dating app 
 
 ## Projektna naloga pr predmetu OPB 
 
