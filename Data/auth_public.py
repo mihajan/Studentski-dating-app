@@ -1,4 +1,4 @@
-db = ''
+db = 'sem2024_mihaj'
 host = 'baza.fmf.uni-lj.si'
-user = 'mihaj'
-password = ''
+user = 'javnost'
+password = 'javnogeslo'
