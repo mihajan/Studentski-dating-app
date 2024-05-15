@@ -6,19 +6,17 @@ from dataclasses import dataclass, field
 #@dataclass_json
 @dataclass
 class Uporabnik:
-    id: int = field(default=0)
+    uporabnisko_ime: str = field(default="")    
     ime: str = field(default="")
-    uporabnisko_ime: str = field(default="")
     geslo: str = field(default="")
-    starost: int = field(default=0)
-    fakulteta: str = field(default="")
+
 
 
 #@dataclass_json
 @dataclass
 class Emotion:
-    id_uporabnika1: int = field(default=0)
-    id_uporabnika2: int = field(default=0)
+    username_uporabnika1: int = field(default="")
+    username_uporabnika2: int = field(default="")
     vrednost: str = field(default="") #vrednosti bodo lahko like/dislike/block
 
 
@@ -42,13 +40,13 @@ class Mozni_odgovor:
 class Odgovor:
     id: int = field(default=0)
     id_moznega_odgovora: int = field(default=0)
-    id_uporabnika: int = field(default=0)
+    username_uporabnika: int = field(default="")
 
 #@dataclass_json
 @dataclass
 class OdgovorDTO:
     id: int = field(default=0)
     id_moznega_odgovora: int = field(default=0)
-    id_uporabnika: int = field(default=0)
+    username_uporabnika: int = field(default="")
     odgovor: str = field(default="")
     vprasanje: str = field(default="")
