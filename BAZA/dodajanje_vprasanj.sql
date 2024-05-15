@@ -1,3 +1,4 @@
+-- Active: 1714029462031@@baza.fmf.uni-lj.si@5432@sem2024_mihaj
 INSERT INTO Vprasanje (vprasanje) VALUES
 ('Katerega spola si?'),
 ('Kateri klub izmed naštetih ti je najljubši?'),
@@ -8,7 +9,9 @@ INSERT INTO Vprasanje (vprasanje) VALUES
 ('Kje bi bil tvoj sanjski prvi date?'),
 ('Katera beseda najbolje opiše tvoje študentsko življenje trenutno?'),
 ('Kakšna je tvoja barv las?'),
-('Kako resno razmerje iščeš?');
+('Kako resno razmerje iščeš?'),
+('Koliko let imaš?'),
+('Katero fakulteto obiskuješ?');
 
 INSERT INTO Mozni_odgovor (mozni_odgovor, id_vprasanja) VALUES
 -- Katerega spola si?
@@ -67,4 +70,45 @@ INSERT INTO Mozni_odgovor (mozni_odgovor, id_vprasanja) VALUES
 ('One night stand', 10),
 ('Iščem bodočo Ženo/Moža', 10),
 ('Poletna romanca', 10),
-('Friends with benefits', 10);
+('Friends with benefits', 10),
+--Koliko let imaš?
+('18', 11),
+('19', 11),
+('20', 11),
+('21', 11),
+('22', 11),
+('23', 11),
+('24', 11),
+('25', 11),
+('26', 11),
+('27', 11),
+('28', 11),
+('29', 11),
+('30', 11),
+--Katero fakulteto obiskuješ?
+('AG', 12),
+('AGRFT', 12),
+('ALUO', 12),
+('BF', 12),
+('EF', 12),
+('FA', 12),
+('FDV', 12),
+('FE', 12),
+('FFA', 12),
+('FGG', 12),
+('FKKT', 12),
+('FMF', 12),
+('FPP', 12),
+('FRI', 12),
+('FSD', 12),
+('FS', 12),
+('FSP', 12),
+('FU', 12),
+('FF', 12),
+('MF', 12),
+('NTF', 12),
+('PEF', 12),
+('PF', 12),
+('TEOF', 12),
+('VF', 12),
+('ZF', 12);
