@@ -34,3 +34,11 @@ CREATE TABLE Emotion (
     FOREIGN KEY (emso_oseba1) REFERENCES Oseba(emso),
     FOREIGN KEY (emso_oseba2) REFERENCES Oseba(emso)
 );
+
+
+CREATE TABLE Uporabnik (
+    username TEXT PRIMARY KEY,
+    role TEXT NOT NULL,
+    password_hash TEXT NOT NULL,
+    last_login DATE
+);

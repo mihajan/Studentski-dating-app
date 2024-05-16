@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
+from datetime import date
 
 # V tej datoteki definiramo vse podatkovne modele, ki jih bomo uporabljali v aplikaciji
 

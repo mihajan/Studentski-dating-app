@@ -21,8 +21,20 @@ INSERT INTO Oseba (emso, ime, priimek, kontakt_ig) VALUES
 ('1818181818181', 'Sara', 'Zorko', 'sara_zorko'),
 ('1919191919191', 'Tina', 'Urh', 'tina_urh'),
 ('2020202020202', 'Urban', 'Žagar', 'urban_zagar');
+INSERT INTO Oseba (emso, ime, priimek, kontakt_ig) VALUES ('0909000500044', 'Miha', 'Jan', 'mihc');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (1, '0909000500044'); -- Moški
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (3, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (11, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (13, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (20, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (28, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (32, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (38, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (39, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (45, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (53, '0909000500044');
+INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (72, '0909000500044');
 
--- Insert answers for each person into the Odgovor table
 
 -- Person 1: Ana Novak
 INSERT INTO Odgovor (id_moznega_odgovora, emso) VALUES (1, '1111111111111'); -- Moški
