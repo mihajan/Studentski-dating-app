@@ -13,7 +13,6 @@ class Oseba:
     kontakt_ig: str = field(default="")
 
 
-
 @dataclass_json
 @dataclass
 class Emotion:
@@ -44,6 +43,7 @@ class Odgovor:
     id_moznega_odgovora: int = field(default=0)
     emso: int = field(default="")
 
+
 @dataclass_json
 @dataclass
 class OdgovorDTO:
@@ -53,6 +53,7 @@ class OdgovorDTO:
     odgovor: str = field(default="") #dodatno celo besedilo odgovora
     vprasanje: str = field(default="") #dodatno celo besedilo vprašanja
 
+
 @dataclass_json
 @dataclass
 class Uporabnik:
@@ -60,6 +61,7 @@ class Uporabnik:
     role: str = field(default="")
     password_hash: str = field(default="")
     last_login: str = field(default="")
+
 
 @dataclass
 class UporabnikDto:

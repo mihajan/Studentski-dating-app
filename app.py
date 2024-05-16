@@ -1,5 +1,5 @@
 from functools import wraps
-from Presentation.bottleext import route, get, post, run, request, template, redirect, static_file, url, response, template_user
+from Presentation.bottleext import route, get, post, run, request, template, redirect, static_file, url, response
 
     # from Services.transakcije_service import TransakcijeService
     # from Services.auth_service import AuthService
@@ -42,4 +42,5 @@ def zacetek():
         )
 
 
-run(host="localhost", port=8080, reloader=True)
+if __name__ == '__main__':
+    run(host="localhost", port=SERVER_PORT, reloader=True)
