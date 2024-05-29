@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Študentski dating app</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        $(document).ready(function() {
+            $(".tabs").tabs();
+        });
+    </script>
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .center-align-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .center-align-button .btn {
+            margin: 0 1.5cm;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo center">Prijava</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="form-container">
+            <div class="row">
+                <form class="col s12"> <!--method="POST" se manjka-->
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input id="username" type="text" class="validate">
+                            <label for="username">Uprabniško ime</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">password</i>
+                            <input id="password" type="password" class="validate">
+                            <label for="password">Geslo</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row center-align-button">
+        <button class="btn waves-effect waves-light" type="submit" name="action">
+            Prijava
+        </button>
+        <button class="btn waves-effect waves-light" type="submit" name="action">
+            Registracija
+        </button>        
+    </div>
+</body>
+
+</html>

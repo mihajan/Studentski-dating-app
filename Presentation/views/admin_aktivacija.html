@@ -23,6 +23,10 @@
         .center-align-button {
             display: flex;
             justify-content: center;
+            margin-top: 20px;
+        }
+        .center-align-button .btn {
+            margin: 0 1.5cm;
         }
     </style>
 </head>
@@ -30,45 +34,37 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-          <a class="brand-logo center">Registracija</a>
+            <span class="brand-logo center">Avtorizacija</span>
         </div>
-      </nav>
+    </nav>
     <div class="container">
         <div class="row">
-            <form class="col s12"> <!--method="POST" se manjka-->
-              <div class="row">
-                <div class="input-field col s6">
-                    <i class="material-icons prefix">face</i>
-                    <input id="ime" type="text" class="validate">
-                    <label for="ime">Ime</label>
-                </div>
-                <div class="input-field col s6">
-                    <input id="priimek" type="text" class="validate">
-                    <label for="priimek">Priimek</label>
-                </div>
-              </div>
-              <div class="row">
+            <div class="row">
                 <div class="input-field col s12">
-                    <i class="material-icons prefix">email</i>
-                    <input id="email" type="email" class="validate">
-                    <label for="email">E-poštni naslov</label>
+                    <input id="aktivacija" type="text" class="validate">
+                    <label for="aktivacija">Aktivacijska koda</label>
                 </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12">
-                    <i class="material-icons prefix">password</i>
-                    <input id="geslo" type="password" class="validate">
-                    <label for="geslo">Geslo</label>
-                </div>
-              </div>
-            </form>
-          </div>
+            </div>
+        </div>
     </div>
     <div class="row center-align-button">
-        <button class="btn waves-effect waves-light" type="submit" name="action">Pridruži se
+        <button class="btn waves-effect waves-light" type="submit" name="action">Nazaj
+            <i class="material-icons left">arrow_back</i>
+        </button>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Nadaljuj
             <i class="material-icons right">send</i>
         </button>
     </div>
+
+    <!-- ta del je obvezen za inicializacijo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var options = {}; // Add any options here
+            var instances = M.FormSelect.init(elems, options);
+        });
+    </script>
 </body>
 
 </html>

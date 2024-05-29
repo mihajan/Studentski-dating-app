@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Študentski dating app</title>
+    <style>
+        body {
+            background-image: url('Presentation/Images/ljubljana.jpg');
+            background-size: cover; /* This ensures the image covers the whole background */
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -15,17 +21,10 @@
             $(".tabs").tabs();
         });
     </script>
-    <style>
-        div.ex1 {
-            width: 500px;
-            margin: auto;
-        }
-    </style>
 </head>
 
 <body>
-    
-    <nav class="nav-extended">
+    <nav>
         <div class="nav-wrapper">
             <a href="#" class="brand-logo center"><i class="material-icons">home</i></a>
             <ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -36,16 +35,33 @@
                 <li><a href="#"><i class="large material-icons">logout</i></a></li>
             </ul>
         </div>
-        <div class="nav-content">
-            <ul class="tabs tabs-transparent">
-              <li class="tab"><a href="#">Like</a></li>
-              <li class="tab"><a href="#">Match</a></li>
-              <li class="tab"><a href="#">Dislike</a></li>
-            </ul>
-          </div>
     </nav>
 
-    <section class="section ">
+    <ul id="slide-out" class="sidenav">
+        <li>
+            <div class="user-view">
+                <div class="background">
+                    <img src="Presentation/Images/ljubljana.jpg">
+                </div>
+                <a><span class="white-text name">Ime Priimek</span></a>
+                <a><span class="white-text email">instagram</span></a>
+            </div>
+        </li>
+        <li><a class="waves-effect" href="#"><i class="material-icons">thumb_up_off_alt</i>Likes</a></li>
+        <li><a class="waves-effect" href="#"><i class="material-icons">thumb_down_off_alt</i>Dislike</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="waves-effect" href="#"><i class="material-icons">favorite_border</i>Matches</a></li>
+    </ul>
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems);
+        });
+    </script>
+
+    <section class="section">
         {{!base}}
     </section>
 </body>
