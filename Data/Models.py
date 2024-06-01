@@ -7,7 +7,7 @@ from datetime import date
 @dataclass_json
 @dataclass
 class Oseba:
-    emso: str = field(default="")    
+    username: str = field(default="")    
     ime: str = field(default="")
     priimek: str = field(default="")
     kontakt_ig: str = field(default="")
@@ -16,8 +16,8 @@ class Oseba:
 @dataclass_json
 @dataclass
 class Emotion:
-    emso_oseba1: int = field(default="")
-    emso_oseba2: int = field(default="")
+    username1: int = field(default="")
+    username2: int = field(default="")
     vrednost: str = field(default="") #vrednosti bodo lahko like/dislike/block
 
 
@@ -41,7 +41,7 @@ class Mozni_odgovor:
 class Odgovor:
     id: int = field(default=0)
     id_moznega_odgovora: int = field(default=0)
-    emso: int = field(default="")
+    username: int = field(default="")
 
 
 @dataclass_json
@@ -49,7 +49,7 @@ class Odgovor:
 class OdgovorDTO:
     id: int = field(default=0)
     id_moznega_odgovora: int = field(default=0)
-    emso: int = field(default="")
+    username: int = field(default="")
     odgovor: str = field(default="") #dodatno celo besedilo odgovora
     vprasanje: str = field(default="") #dodatno celo besedilo vprašanja
 
