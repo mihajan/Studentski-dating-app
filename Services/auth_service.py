@@ -11,6 +11,7 @@ class AuthService:
          self.repo = Repo()
 
     def obstaja_uporabnik(self, uporabnik: str) -> bool:
+        #kaj je fora te funkcije če dejansko nč ne prevermo?
         try:
             user = self.repo.dobi_uporabnika(uporabnik)
             return True
