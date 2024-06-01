@@ -6,7 +6,6 @@ repo = Repo()
 
 # Dobimo vse osebe
 
-osebe = repo.dobi_osebe()
 #to nekak dela
 
 # Jih izpišemo
@@ -16,55 +15,49 @@ osebe = repo.dobi_osebe()
 
 #######################
 #testiranje chat predstavitev rezultatov
-repo = Repo()
-emso = '0909000500044'  # Replace with the actual emso you want to query
-#answers = repo.dobi_odgovore_za_osebo(emso)
+username = '0909000500044'  
+#answers = repo.dobi_odgovore_za_osebo(username)
 
-#for answer in answers:
-#    print(f"Question: {answer['question']}, Answer: {answer['answer']}")
-
-oseba = repo.dobi_osebo(emso)
-print(f"Ime: {oseba.ime}, Priimek: {oseba.priimek}, Kontakt IG: {oseba.kontakt_ig}")
-
-#test seznama
-answer_ids = repo.dobi_odgovore_ids_za_osebo(emso)
-
-print("Answer IDs:", answer_ids)
-answer_texts = repo.dobi_odgovore_texts_za_osebo(emso)
-
-print("Odogovri za", emso, "so:", answer_texts)
-
-#dodajanje emotionov
-#repo.dodaj_emotion_like(emso, "2222222222222")
-#repo.dodaj_emotion_dislike(emso, "2222222222222")
-#repo.dodaj_emotion_block(emso, "2222222222222")
-# repo.dodaj_emotion_like(emso, "1111111111111")
-# repo.dodaj_emotion_like("1111111111111", emso)
-# repo.dodaj_emotion_like(emso, "3333333333333")
-# repo.dodaj_emotion_like(emso, "8888888888888")
-# repo.dodaj_emotion_like(emso, "1111111111110")
-# repo.dodaj_emotion_like("3333333333333",emso)
-# repo.dodaj_emotion_like("8888888888888",emso)
-# repo.dodaj_emotion_like("1111111111110",emso)
-
-
-
-
-#matchi = repo.matchi_osebe(emso)
+#matchi = repo.matchi_osebe(username)
 
 #print("Matchi:", matchi)
 
 #matchi2 = repo.matchi_osebe('1111111111111')
 #print("Matchi:", matchi2)
 
-emso_oseba1 = '1111111111111'  # Zamenjajte z dejanskim emsom
-emso_oseba2 = '2222222222222'  # Zamenjajte z dejanskim emsom
+username1 = '1111111111111'  # Zamenjajte z dejanskim usernamem
+username2 = '2222222222222'  # Zamenjajte z dejanskim usernamem
 
 # Dodaj ali posodobi 'like'
-#repo.spremeni_emotion(emso_oseba1, emso_oseba2, 'like')
-
+repo.spremeni_emotion(username1, username2, 'like')
+repo.spremeni_emotion(username, username2, 'like')
+repo.spremeni_emotion(username2, username1, 'dislike')
+repo.spremeni_emotion(username2, username, 'like')
 # Dodaj ali posodobi 'dislike'
-repo.spremeni_emotion(emso_oseba1, emso_oseba2, 'dislike')
+#repo.spremeni_emotion(username1, username2, 'dislike')
 
 # Dodaj ali posodobi 'block'
-#repo.spremeni_emotion(emso_oseba1, emso_oseba2, 'block')
+#repo.spremeni_emotion(username1, username2, 'block')
+
+
+#vsi_odgovori = repo.odgovori_text_vsi()
+#for v in vsi_odgovori:
+#    print(v)
+#print(repo.oseba_matchi(username))
+print(repo.oseba_dislike(username2))
+
+#repo.dodaj_vprasanje(Vprasanje(vprasanje="A to dela?"))
+#dela
+id_odgovora = 3  # Zamenjajte z dejanskim ID-jem odgovora
+
+
+#odgovor_dto = repo.dobi_odgovorDTO(id_odgovora)
+
+#print(f"Vprašanje: {odgovor_dto.vprasanje}, Odgovor: {odgovor_dto.odgovor}")
+
+odgovori_dto = repo.dobi_odgovore_osebeDTO(username)
+
+for v in odgovori_dto:
+    #print(f"Vprašanje: {odgovor_dto.vprasanje}, Odgovor: {odgovor_dto.odgovor}")
+    print(v)
+    

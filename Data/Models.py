@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
 from datetime import date
+from typing import List
+
 
 # V tej datoteki definiramo vse podatkovne modele, ki jih bomo uporabljali v aplikaciji
 
@@ -12,9 +14,27 @@ class Oseba:
     priimek: str = field(default="")
     kontakt_ig: str = field(default="")
 
+@dataclass_json
+@dataclass
+class OsebaDTO:
+    username: str = field(default="")    
+    ime: str = field(default="")
+    odgovori: List[str] = field(default_factory=list)
 
 @dataclass_json
 @dataclass
+class OsebafullDTO:
+    username: str = field(default="")    
+    ime: str = field(default="")
+    priimek: str = field(default="")
+    kontakt_ig: str = field(default="")
+    odgovori: List[str] = field(default_factory=list)
+
+
+
+@dataclass_json
+@dataclass
+#tega verjetno ne bo nikjer za tko uporabit
 class Emotion:
     username1: int = field(default="")
     username2: int = field(default="")
@@ -27,6 +47,8 @@ class Vprasanje:
     id: int = field(default=0)
     vprasanje: str = field(default="")
 
+class VprasanjeDTO:
+    vprasanje: str = field(default="")
 
 @dataclass_json
 @dataclass
@@ -34,6 +56,11 @@ class Mozni_odgovor:
     id: int = field(default=0)
     mozni_odgovor: str = field(default="")
     id_vprasanja: int = field(default=0)
+
+@dataclass_json
+@dataclass
+class Mozni_odgovorDTO:
+    mozni_odgovor: str = field(default="")
 
 
 @dataclass_json
@@ -47,11 +74,8 @@ class Odgovor:
 @dataclass_json
 @dataclass
 class OdgovorDTO:
-    id: int = field(default=0)
-    id_moznega_odgovora: int = field(default=0)
-    username: int = field(default="")
-    odgovor: str = field(default="") #dodatno celo besedilo odgovora
     vprasanje: str = field(default="") #dodatno celo besedilo vprašanja
+    odgovor: str = field(default="") #dodatno celo besedilo odgovora
 
 
 @dataclass_json
