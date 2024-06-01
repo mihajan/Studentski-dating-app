@@ -60,4 +60,8 @@ odgovori_dto = repo.dobi_odgovore_osebeDTO(username)
 for v in odgovori_dto:
     #print(f"Vprašanje: {odgovor_dto.vprasanje}, Odgovor: {odgovor_dto.odgovor}")
     print(v)
+
+osebe_dto = repo.dobi_brezstika_osebeDTO(username2)
+for oseba_dto in osebe_dto:
+    print(oseba_dto)
     

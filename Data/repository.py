@@ -364,6 +364,84 @@ class Repo:
         results = self.cur.fetchall()
         dislikes = [row['disliked_username'] for row in results]
         return dislikes
+
+    def oseba_brezstika(self, username: str) -> List[str]:
+        '''
+        Vrne seznam usernamov vseh oseb, s katerimi nismo bili še v stiku
+        '''
+        self.cur.execute("""
+            SELECT o.username
+            FROM Oseba o
+            WHERE o.username != %s
+            AND o.username NOT IN (
+                SELECT e.username2
+                FROM Emotion e
+                WHERE e.username1 = %s
+            )
+        """, (username, username))
+        
+        results = self.cur.fetchall()
+        usernames = [row['username'] for row in results]
+        return usernames
+#-------------------------------------------------------------------------------------------------------
+#metode, ki jih bova dejansko klicala (vrnejo vse osebe za določen seznam za našga userja)
+#pozor: te motode se sklicujejo na zgornje metode in jih je zato nevarno preurejati
+    def dobi_like_osebeDTO(self, username: str) -> List[OsebaDTO]:
+        '''
+        Za podan username prikaže vse ki bodo na prikazani pod like.
+        '''
+        # Najprej pridobimo seznam usernamov oseb, ki jih je dana oseba "like"
+        liked_usernames = self.oseba_like(username)
+
+        oseba_dto_list = []
+        for liked_username in liked_usernames:
+            oseba_dto = self.dobi_oseboDTO(liked_username)
+            if oseba_dto:
+                oseba_dto_list.append(oseba_dto)
+        return oseba_dto_list
+
+    def dobi_dislike_osebeDTO(self, username: str) -> List[OsebaDTO]:
+        '''
+        Za podan username prikaže vse ki bodo na prikazani pod dislike.
+        '''
+        # Najprej pridobimo seznam usernamov oseb, ki jih je dana oseba dislikala
+        disliked_usernames = self.oseba_dislike(username)
+
+        oseba_dto_list = []
+        for disliked_username in disliked_usernames:
+            oseba_dto = self.dobi_oseboDTO(disliked_username)
+            if oseba_dto:
+                oseba_dto_list.append(oseba_dto)
+        return oseba_dto_list
+    
+    def dobi_brezstika_osebeDTO(self, username: str) -> List[OsebaDTO]:
+        '''
+        Za podan username prikaže vse ki bodo na prikazani na prvotni strani
+        oz jih še nismo nič reactal
+        '''
+        # Najprej pridobimo seznam usernamov oseb, ki jih je dana oseba dislikala
+        usernames = self.oseba_brezstika(username)
+
+        oseba_dto_list = []
+        for username in usernames:
+            oseba_dto = self.dobi_oseboDTO(username)
+            if oseba_dto:
+                oseba_dto_list.append(oseba_dto)
+        return oseba_dto_list    
+    
+    def dobi_matche_osebefullDTO(self, username: str) -> List[OsebafullDTO]:
+        '''
+        Za podan username prikaže vse ki bodo na prikazani pod matchi.
+        '''
+        # Najprej pridobimo seznam usernamov oseb, ki jih je dana oseba matchala
+        matched_usernames = self.oseba_matchi(username)
+
+        oseba_dto_list = []
+        for matched_username in matched_usernames:
+            oseba_dto = self.dobi_osebo_fullDTO(matched_username)
+            if oseba_dto:
+                oseba_dto_list.append(oseba_dto)
+        return oseba_dto_list
 #-------------------------------------------------------------------------------------------------------
 #Metode za upravljanje uporabnikov
     def dodaj_osebo(self, oseba: Oseba):
