@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Študentski dating app</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        $(document).ready(function() {
+            $(".tabs").tabs();
+        });
+    </script>
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .center-align-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .center-align-button .btn {
+            margin: 0 1.5cm;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo center">
+                Vprašanja
+            </a>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <form action="#">
+            <p>1. Katerega spola si?</p>
+            <p>
+                <label>
+                  <input name="spol" type="radio" value = "moski" />
+                  <span>Moški</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                  <input name="spol" type="radio" value = "zenska" />
+                  <span>Ženska</span>
+                </label>
+            </p>
+
+
+            <p>2. Kateri klub izmed naštetih ti je najljubši?</p>
+
+            <p>
+                <label>
+                    <input name="klub" type="radio" value="cvetlicarna"/>
+                    <span>Cvetličarna</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="klub" type="radio" value="k4"/>
+                    <span>K4</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="klub" type="radio" value="cirkus"/>
+                    <span>Cirkus</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="klub" type="radio" value="square"/>
+                    <span>Square</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="klub" type="radio" value="tiffany"/>
+                    <span>Tiffany</span>
+                </label>
+            </p>
+
+
+            <p>3. Kam greš najraje na pivo/koktejl?</p>
+            <p>
+                <label>
+                    <input name="drink" type="radio" value="foerster"/>
+                    <span>Foerster</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="drink" type="radio" value="semafor"/>
+                    <span>Semafor</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="drink" type="radio" value="castle"/>
+                    <span>Castle</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="drink" type="radio" value="nabrezje_15"/>
+                    <span>Nabrežje 15</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="drink" type="radio" value="zmauc"/>
+                    <span>Žmauc</span>
+                </label>
+            </p>
+
+            <p>4. Kje najpogosteje ješ na bone?</p>
+            <p>
+                <label>
+                    <input name="kosilo" type="radio" value="das_ist_valter"/>
+                    <span>Das ist Valter</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="kosilo" type="radio" value="dabuda"/>
+                    <span>Dabuda</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="kosilo" type="radio" value="mcdonalds"/>
+                    <span>McDonald's</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="kosilo" type="radio" value="menza_fe"/>
+                    <span>Menza FE</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="kosilo" type="radio" value="foculus"/>
+                    <span>Foculus</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="kosilo" type="radio" value="allegria"/>
+                    <span>Allegria</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="kosilo" type="radio" value="meta_in_bazilika"/>
+                    <span>Meta in Bazilika</span>
+                </label>
+            </p>
+
+            <p>5. Na kateri šport se najpogosteje prijaviš preko POPR-a?</p>
+            <p>
+                <label>
+                    <input name="sport" type="radio" value="odbojka"/>
+                    <span>Odbojka</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="sport" type="radio" value="fitnes"/>
+                    <span>Fitnes</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="sport" type="radio" value="joga"/>
+                    <span>Joga</span>
+                </label>
+            </p>
+
+            <p>6. Ali imaš zakupljen abonma (npr. pri Drami, Mladinskem gledališču …)</p>
+            <p>
+                <label>
+                    <input name="abonma" type="radio" value="da"/>
+                    <span>Da</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="abonma" type="radio" value="ne"/>
+                    <span>Ne</span>
+                </label>
+            </p>
+
+            <p>7. Kje bi bil tvoj sanjski prvi date?</p>
+            <p>
+                <label>
+                    <input name="date" type="radio" value="nuk"/>
+                    <span>NUK</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="date" type="radio" value="biljard"/>
+                    <span>Biljard</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="date" type="radio" value="piknik_v_parku"/>
+                    <span>Piknik v parku</span>
+                </label>
+            </p>
+
+            <p>8. Katera beseda najbolje opiše tvoje študentsko življenje trenutno?</p>
+            <p>
+                <label>
+                    <input name="life" type="radio" value="kaoticno"/>
+                    <span>Kaotično</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="life" type="radio" value="organizirano"/>
+                    <span>Organizirano</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="life" type="radio" value="brezskrbno"/>
+                    <span>Brezskrbno</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="life" type="radio" value="nekje_med"/>
+                    <span>Nekje med A in B</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="life" type="radio" value="na_drugem"/>
+                    <span>Na drugem planetu</span>
+                </label>
+            </p>
+
+            <p>9. Kakšna je tvoja barva las?</p>
+            <p>
+                <label>
+                    <input name="lasje" type="radio" value="rjava"/>
+                    <span>Rjava</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="lasje" type="radio" value="crna"/>
+                    <span>Črna</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="lasje" type="radio" value="blond"/>
+                    <span>Blond</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="lasje" type="radio" value="oranzna"/>
+                    <span>Oranžna</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="lasje" type="radio" value="Drugo"/>
+                    <span>Drugo</span>
+                </label>
+            </p>
+
+            <p>10. Kako resno razmerje iščeš?</p>
+            <p>
+                <label>
+                    <input name="zveza" type="radio" value="one"/>
+                    <span>One night stand</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="zveza" type="radio" value="poroka"/>
+                    <span>Iščem bodočo Ženo/Moža</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="zveza" type="radio" value="romanca"/>
+                    <span>Poletna romanca</span>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input name="zveza" type="radio" value="fwb"/>
+                    <span>Friends with benefits</span>
+                </label>
+            </p>
+
+
+            
+        </form>
+        <!-- To neki ne dela pa nevem kaj-->
+        <div class="input-field col s12">
+            <select>
+              <option value="" disabled selected>Izberi starost</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+              <option value="21">21</option>
+              <option value="22">22</option>
+              <option value="23">23</option>
+              <option value="24">24</option>
+              <option value="25">25</option>
+              <option value="26">26</option>
+              <option value="27">27</option>
+              <option value="28">28</option>
+              <option value="29">29</option>
+              <option value="30">30</option>
+            </select>
+            <label>Koliko let imaš</label>
+        </div>     
+        
+        <div class="input-field col s12">
+            <select>
+              <option value="" disabled selected>Izberi fakulteto</option>
+              <option value="AG">AG</option>
+              <option value="AGRFT">AGRFT</option>
+                <option value="ALUO">ALUO</option>
+                <option value="BF">BF</option>
+                <option value="EF">EF</option>
+                <option value="FA">FA</option>
+                <option value="FDV">FDV</option>
+                <option value="FE">FE</option>
+                <option value="FFA">FFA</option>
+                <option value="FGG">FGG</option>
+                <option value="FKKT">FKKT</option>
+                <option value="FMF">FMF</option>
+                <option value="FPP">FPP</option>
+                <option value="FRI">FRI</option>
+                <option value="FSD">FSD</option>
+                <option value="FS">FS</option>
+                <option value="FSP">FSP</option>
+                <option value="FU">FU</option>
+                <option value="FF">FF</option>
+                <option value="MF">MF</option>
+                <option value="NTF">NTF</option>
+                <option value="PEF">PEF</option>
+                <option value="PF">PF</option>
+                <option value="TEOF">TEOF</option>
+                <option value="VF">VF</option>
+                <option value="ZF">ZF</option>
+            </select>
+            <label>Katero fakulteto obiskuješ</label>
+        </div> 
+
+        <div class="button-container">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+
+    </div>
+
+</body>
+
+
+</html>

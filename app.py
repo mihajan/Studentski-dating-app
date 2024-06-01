@@ -34,6 +34,48 @@ RELOADER = os.environ.get('BOTTLE_RELOADER', True)
     # def static(filename):
     #     return static_file(filename, root='Presentation/static')
 
+    # @get('/prijava')
+    # def prijava_get():
+    #     return template(
+    #         "prijava.html"
+    #     )
+
+    # @post('/prijava')
+    # def prijava_post():
+    #     uporabnisko_ime = request.forms.getunicode("uporabnisko_ime")
+    #     geslo = request.forms.getunicode("geslo")
+    #     if uporabnisko_ime == geslo[::-1]:
+    #         response.set_cookie("uporabnisko_ime", uporabnisko_ime, path="/", secret=SIFRIRNI_KLJUC)
+    #         redirect("/")
+    #     else:
+    #         return "Napaka ob prijavi"
+
+    # @route("/odjava/")
+    # def odjava_post():
+    #     response.delete_cookie("uporabnisko_ime", path="/")
+    #     redirect("/")
+    #
+    # tole je sam prekopiran iz mojga starga projekta; vsako stvar k jo lohka spreminjaš more met posebi get in post metodo
+    # @get("/spremeni-ime/<id_osebe:int>/")
+    # def spremeni_ime_get(id_osebe):
+    #     return template(
+    #         "spremeni_ime.html", napake={}, polja={}
+    #     )
+
+    # @post("/spremeni-ime/<id_osebe:int>/")
+    # def spremeni_ime(id_osebe):
+    #     stanje = stanje_trenutnega_uporabnika()
+    #     oseba = stanje.ljudje[id_osebe]
+    #     novo_ime = request.forms.getunicode("ime")
+    #     nova_oseba = Oseba(novo_ime, stroski=[])
+    #     napake = stanje.preveri_osebo(nova_oseba)
+    #     if napake:
+    #         polja = {"ime": novo_ime}
+    #         return template("dodaj_osebo.html", napake=napake, polja=polja)
+    #     else:
+    #         oseba.spremeni_ime(novo_ime)
+    #         shrani_stanje_trenutnega_uporabnika(stanje)
+    #         redirect(url_osebe(id_osebe))
 
 @get('/')
 def zacetek():
