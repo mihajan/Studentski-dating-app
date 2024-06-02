@@ -6,7 +6,7 @@ import auth as auth
 
 #from Data.Models import Oseba, Emotion, Vprasanje, Mozni_odgovor, Odgovor, OdgovorDTO
 from Models import Oseba, OsebaDTO, OsebafullDTO, Emotion, Vprasanje, VprasanjeDTO, Mozni_odgovor, Mozni_odgovorDTO,Odgovor, OdgovorDTO, Uporabnik, UporabnikDto
-from typing import List
+from typing import List, Dict
 import datetime
 
 ## V tej datoteki bomo implementirali razred Repo, ki bo vseboval metode za delo z bazo.
@@ -51,7 +51,7 @@ class Repo:
 
         # Pridobimo odgovore za določeno osebo
         self.cur.execute("""
-            SELECT mo.mozni_odgovor
+            SELECT mo.id_vprasanja, mo.mozni_odgovor
             FROM Odgovor o
             JOIN Mozni_odgovor mo ON o.id_moznega_odgovora = mo.id
             WHERE o.username = %s
@@ -59,7 +59,7 @@ class Repo:
         """, (username,))
         
         results = self.cur.fetchall()
-        answer_texts = [row['mozni_odgovor'] for row in results]
+        odgovori = {row['id_vprasanja']: row['mozni_odgovor'] for row in results}
 
         # Ustvarimo instanco razreda OsebafullDTO
         oseba_full_dto = OsebafullDTO(
@@ -67,7 +67,7 @@ class Repo:
             ime=ime,
             priimek=priimek,
             kontakt_ig=kontakt_ig,
-            odgovori=answer_texts
+            odgovori=odgovori
         )
 
         return oseba_full_dto    
@@ -88,7 +88,7 @@ class Repo:
 
         # Pridobimo odgovore za določeno osebo
         self.cur.execute("""
-            SELECT mo.mozni_odgovor
+            SELECT mo.id_vprasanja, mo.mozni_odgovor
             FROM Odgovor o
             JOIN Mozni_odgovor mo ON o.id_moznega_odgovora = mo.id
             WHERE o.username = %s
@@ -96,13 +96,13 @@ class Repo:
         """, (username,))
         
         results = self.cur.fetchall()
-        answer_texts = [row['mozni_odgovor'] for row in results]
+        odgovori = {row['id_vprasanja']: row['mozni_odgovor'] for row in results}
 
         # Ustvarimo instanco razreda OsebaDTO
         oseba_dto = OsebaDTO(
             username=username,
             ime=ime,
-            odgovori=answer_texts
+            odgovori=odgovori
         )
 
         return oseba_dto

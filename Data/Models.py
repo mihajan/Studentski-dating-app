@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
 from datetime import date
-from typing import List
+from typing import List, Dict
 
 
 # V tej datoteki definiramo vse podatkovne modele, ki jih bomo uporabljali v aplikaciji
@@ -19,7 +19,7 @@ class Oseba:
 class OsebaDTO:
     username: str = field(default="")    
     ime: str = field(default="")
-    odgovori: List[str] = field(default_factory=list)
+    odgovori: Dict[int, str] = field(default_factory=dict)
 
 @dataclass_json
 @dataclass
@@ -28,7 +28,7 @@ class OsebafullDTO:
     ime: str = field(default="")
     priimek: str = field(default="")
     kontakt_ig: str = field(default="")
-    odgovori: List[str] = field(default_factory=list)
+    odgovori: Dict[int, str] = field(default_factory=dict)
 
 
 
