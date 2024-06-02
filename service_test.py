@@ -1,13 +1,17 @@
 from Services.oseba_service import OsebaService
-from Data.models import Oseba
+from Services.auth_service import AuthService
+from Data.models import *
 
 service = OsebaService()
+auth = AuthService()
 
 # Preizkus pridobivanja osebe
 #oseba = service.dobi_osebo('user1')
 #print(oseba)
 
 #service.dodaj_osebo("hruska", "Luka", "houska", "debela_hruska")
+#service.dodaj_osebo('mihc','Miha', 'Jan', 'mj9')
+
 
 #service.spremeni_emotion('hruska', 'user1', 'like')
 
@@ -17,3 +21,5 @@ service = OsebaService()
 
 #service.dodaj_odgovor_uporabnika("hruska", 1)
 #service.dodaj_odgovor_uporabnika("hruska", 9)
+
+auth.prijavi_uporabnika('mihc', 'mihc')

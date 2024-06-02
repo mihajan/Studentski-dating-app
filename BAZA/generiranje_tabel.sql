@@ -10,6 +10,7 @@ CREATE TABLE Uporabnik (
     role TEXT NOT NULL,
     password_hash TEXT NOT NULL,
     last_login DATE,
+    CONSTRAINT check_role CHECK (role IN ('admin','user')),
     FOREIGN KEY (username) REFERENCES Oseba(username));    
 
 CREATE TABLE Emotion (

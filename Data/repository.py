@@ -274,7 +274,7 @@ class Repo:
 
 #Metode, ki se nanašajo na emotione 
 
-    def spremeni_emotion(self, oseba1: Oseba, oseba2: Oseba, vrednost: str):
+    def spremeni_emotion(self, oseba1: Oseba, oseba2: Oseba, vrednost: str) -> None:
         '''
         Spremeni ali doda vrednost za podan par v tabeli Emotion.
         Vrednost je lahko 'like', 'dislike' ali 'block'.
@@ -458,7 +458,7 @@ class Repo:
     def dobi_uporabnika(self, username:str) -> Uporabnik:
         self.cur.execute("""
             SELECT username, role, password_hash, last_login
-            FROM uporabniki
+            FROM uporabnik
             WHERE username = %s
         """, (username,))
          
@@ -467,7 +467,7 @@ class Repo:
     
     def posodobi_uporabnika(self, uporabnik: Uporabnik):
         self.cur.execute("""
-            Update uporabniki set last_login = %s where username = %s
+            Update uporabnik set last_login = %s where username = %s
             """, (uporabnik.last_login,uporabnik.username))
         self.conn.commit()
 

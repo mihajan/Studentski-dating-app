@@ -1,6 +1,6 @@
 from Data.repository import Repo
-from Data.Models import *
-from typing import List
+from Data.models import *
+from typing import List, Union
 import bcrypt
 from datetime import date
 
@@ -18,7 +18,7 @@ class AuthService:
         except:
             return False
         
-    def prijavi_uporabnika(self, uporabnik : str, geslo: str) -> UporabnikDto | bool :
+    def prijavi_uporabnika(self, uporabnik : str, geslo: str) -> Union[UporabnikDto,bool] :
 
         # Najprej dobimo uporabnika iz baze
         user = self.repo.dobi_uporabnika(uporabnik)

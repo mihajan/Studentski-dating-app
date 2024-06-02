@@ -1,5 +1,5 @@
-from repository import Repo
-from models import *
+from Data.repository import Repo
+from Data.models import *
 
 
 repo = Repo()
@@ -81,4 +81,10 @@ oseba2 = Oseba(
 repo.spremeni_emotion(oseba1, oseba2, "like")  
 repo.spremeni_emotion(oseba2, oseba1, "like") 
 
-repo.spremeni_odgovor(253, 20)
+odg = Odgovor(
+    id=253,
+    id_moznega_odgovora = 20,
+    username='hruska'
+)
+
+repo.spremeni_odgovor(odg, 19)
