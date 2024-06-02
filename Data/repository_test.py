@@ -1,5 +1,5 @@
 from repository import Repo
-from Models import *
+from models import *
 
 
 repo = Repo()
@@ -29,10 +29,10 @@ username1 = '1111111111111'  # Zamenjajte z dejanskim usernamem
 username2 = '2222222222222'  # Zamenjajte z dejanskim usernamem
 
 # Dodaj ali posodobi 'like'
-repo.spremeni_emotion(username1, username2, 'like')
-repo.spremeni_emotion(username, username2, 'like')
-repo.spremeni_emotion(username2, username1, 'dislike')
-repo.spremeni_emotion(username2, username, 'like')
+#repo.spremeni_emotion(username1, username2, 'like')
+#repo.spremeni_emotion(username, username2, 'like')
+#repo.spremeni_emotion(username2, username1, 'dislike')
+#repo.spremeni_emotion(username2, username, 'like')
 # Dodaj ali posodobi 'dislike'
 #repo.spremeni_emotion(username1, username2, 'dislike')
 
@@ -57,11 +57,28 @@ id_odgovora = 3  # Zamenjajte z dejanskim ID-jem odgovora
 
 odgovori_dto = repo.dobi_odgovore_osebeDTO(username)
 
-for v in odgovori_dto:
+#for v in odgovori_dto:
     #print(f"Vprašanje: {odgovor_dto.vprasanje}, Odgovor: {odgovor_dto.odgovor}")
-    print(v)
+    #print(v)
 
-osebe_dto = repo.dobi_brezstika_osebeDTO(username2)
-for oseba_dto in osebe_dto:
-    print(oseba_dto)
+#osebe_dto = repo.dobi_matche_osebefullDTO(username2)
+#for oseba_dto in osebe_dto:
+#    print(oseba_dto)
     
+oseba1 = Oseba(
+    username="user1",
+    ime="Janez",
+    priimek="Novak",
+    kontakt_ig="janez.n"
+)
+
+oseba2 = Oseba(
+    username="user2",
+    ime="Maja",
+    priimek="Kovač",
+    kontakt_ig="maja.k"
+)
+repo.spremeni_emotion(oseba1, oseba2, "like")  
+repo.spremeni_emotion(oseba2, oseba1, "like") 
+
+repo.spremeni_odgovor(253, 20)

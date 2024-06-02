@@ -2,10 +2,11 @@ import psycopg2, psycopg2.extensions, psycopg2.extras
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo problemov s šumniki
 #import Data.auth_public as auth
 #import auth_public as auth
-import auth as auth
+#import auth as auth
+from . import auth
 
 #from Data.Models import Oseba, Emotion, Vprasanje, Mozni_odgovor, Odgovor, OdgovorDTO
-from Models import Oseba, OsebaDTO, OsebafullDTO, Emotion, Vprasanje, VprasanjeDTO, Mozni_odgovor, Mozni_odgovorDTO,Odgovor, OdgovorDTO, Uporabnik, UporabnikDto
+from Data.models import Oseba, OsebaDTO, OsebafullDTO, Emotion, Vprasanje, VprasanjeDTO, Mozni_odgovor, Mozni_odgovorDTO,Odgovor, OdgovorDTO, Uporabnik, UporabnikDto
 from typing import List, Dict
 import datetime
 
@@ -166,39 +167,19 @@ class Repo:
         """, (id,))
         
         mozni_odgovor = self.cur.fetchone()
-        return Mozni_odgovor(mozni_odgovor=mozni_odgovor['mozni_odgovor']) 
+        return Mozni_odgovor(mozni_odgovor=mozni_odgovor['mozni_odgovor'])
 
-    def dodaj_mozni_odgovor(self, mozni_odgovor: str, id_vprasanja: int):
+    def spremeni_odgovor(self, odgovor: Odgovor, nov_id_moznega_odgovora: int) -> None:
         '''
-        Doda nov možni odgovor (id se sam nardi)
-        '''
-        self.cur.execute("""
-            INSERT INTO Mozni_odgovor (mozni_odgovor, id_vprasanja)
-            VALUES (%s, %s)
-        """, (mozni_odgovor, id_vprasanja))
-        self.conn.commit()
-
-    def dodaj_odgovor(self, id_moznega_odgovora: int, username: str):
-        '''
-        Zapiše kaj je odgovoril user
-        '''
-        self.cur.execute("""
-            INSERT INTO Odgovor (id_moznega_odgovora, username)
-            VALUES (%s, %s)
-        """, (id_moznega_odgovora, username))
-        self.conn.commit()
-
-    def spremeni_odgovor(self, id: int, nov_id_moznega_odgovora: int):
-        '''
-        Spremeni id_moznega_odgovora za podan ID (usernama ne spreminjamo)
+        Spremeni id_moznega_odgovora za podan odgovor (username ne spreminjamo)
         torej zamenjamo le odgovor nekega fiksnega uporabnika
         '''
         self.cur.execute("""
             UPDATE Odgovor
             SET id_moznega_odgovora = %s
             WHERE id = %s
-        """, (nov_id_moznega_odgovora, id))
-        self.conn.commit()        
+        """, (nov_id_moznega_odgovora, odgovor.id))
+        self.conn.commit()      
 
     def dobi_odgovor(self, id: int) -> Odgovor:
         '''
@@ -293,7 +274,7 @@ class Repo:
 
 #Metode, ki se nanašajo na emotione 
 
-    def spremeni_emotion(self, username1: str, username2: str, vrednost: str):
+    def spremeni_emotion(self, oseba1: Oseba, oseba2: Oseba, vrednost: str):
         '''
         Spremeni ali doda vrednost za podan par v tabeli Emotion.
         Vrednost je lahko 'like', 'dislike' ali 'block'.
@@ -303,7 +284,7 @@ class Repo:
 
         self.cur.execute("""
             SELECT 1 FROM Emotion WHERE username1 = %s AND username2 = %s
-        """, (username1, username2))
+        """, (oseba1.username, oseba2.username))
         
         if self.cur.fetchone():
             # Če vrstica obstaja, posodobimo vrednost
@@ -311,15 +292,15 @@ class Repo:
                 UPDATE Emotion 
                 SET vrednost = %s 
                 WHERE username1 = %s AND username2 = %s
-            """, (vrednost, username1, username2))
+            """, (vrednost, oseba1.username, oseba2.username))
         else:
             # Če vrstica ne obstaja, dodamo novo vrstico
             self.cur.execute("""
                 INSERT INTO Emotion (username1, username2, vrednost)
                 VALUES (%s, %s, %s)
-            """, (username1, username2, vrednost))
+            """, (oseba1.username, oseba2.username, vrednost))
         
-        self.conn.commit()    
+        self.conn.commit()   
 
     def oseba_matchi(self, username: str) -> List[str]:
         '''
@@ -490,4 +471,23 @@ class Repo:
             """, (uporabnik.last_login,uporabnik.username))
         self.conn.commit()
 
-#potrebno bi bilo dodati še metode za spreminjanje.. nevem točno kje bi se tega lotil
+#dodajanje novih odgovorov
+    def dodaj_mozni_odgovor(self, mozni_odgovor: Mozni_odgovor) -> None:
+        '''
+        Doda nov možni odgovor (id se sam nardi)
+        '''
+        self.cur.execute("""
+            INSERT INTO Mozni_odgovor (mozni_odgovor, id_vprasanja)
+            VALUES (%s, %s)
+        """, (mozni_odgovor.mozni_odgovor, mozni_odgovor.id_vprasanja))
+        self.conn.commit()
+
+    def dodaj_odgovor(self, odgovor: Odgovor) -> None:
+        '''
+        Zapiše kaj je odgovoril user
+        '''
+        self.cur.execute("""
+            INSERT INTO Odgovor (id_moznega_odgovora, username)
+            VALUES (%s, %s)
+        """, (odgovor.id_moznega_odgovora, odgovor.username))
+        self.conn.commit()
