@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seznam Oseb</title>
+</head>
+<body>
+    <h1>Seznam Oseb</h1>
+    <ul>
+        % for oseba in osebe:
+            <li>{{oseba['username']}} - {{oseba['ime']}} {{oseba['priimek']}}</li>
+        % end
+    </ul>
+</body>
+</html>
