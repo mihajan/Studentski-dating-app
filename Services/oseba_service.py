@@ -13,7 +13,7 @@ class OsebaService:
     
     def dobi_osebo(self, username: str) -> Oseba:
         '''Prikaži sebi svoje podatke'''
-        return self.repo.dobi_osebo(username)    
+        return self.repo.dobi_osebo_fullDTO(username)    
 
     #metode za dobit pravilne sezname osebe glede na username uporabnika
     def dobi_like_osebe(self, username) -> List[OsebaDTO]:
@@ -27,7 +27,7 @@ class OsebaService:
     def dobi_brezstika_osebe(self, username) -> List[OsebaDTO]:
         '''Prikaz osnovnem "search" meniju'''
         return self.repo.dobi_brezstika_osebeDTO(username)
-
+        
     def dobi_matche_osebe(self, username) -> List[OsebafullDTO]:
         '''Prikaz na meniju kjer so tvoji matchi'''
         return self.repo.dobi_matche_osebefullDTO(username)        
@@ -38,6 +38,16 @@ class OsebaService:
         oseba1 = self.repo.dobi_osebo(username1)
         oseba2 = self.repo.dobi_osebo(username2)
         self.repo.spremeni_emotion(oseba1, oseba2, vrednost)
+
+    def dobi_vsa_vprasanja_in_mozne_odgovore(self) -> List[Vprasanje]:
+        '''
+        Pridobi vsa vprašanja in njihove možne odgovore
+        '''
+        vprasanja = self.repo.dobi_vprasanja()
+        for vprasanje in vprasanja:
+            mozni_odgovori = self.repo.dobi_mozne_odgovore(vprasanje.id)
+            vprasanje.mozni_odgovori = mozni_odgovori
+        return vprasanja
 
 #dodajanje oseb, uporabnikov
 
@@ -73,5 +83,10 @@ class OsebaService:
         odgovor = self.repo.dobi_odgovor(id)
         self.repo.spremeni_odgovor(odgovor, nov_id_moznega_odgovora)
 
-   
+    def izbrisi_odgovore_uporabnika(self, username: str) -> None:
+        """
+        Izbriše vse odgovore za podanega uporabnika.
+        """
+        self.repo.izbrisi_odgovore_osebe(username)
+
     

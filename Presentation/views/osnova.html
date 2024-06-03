@@ -7,7 +7,7 @@
     <title>Študentski dating app</title>
     <style>
         body {
-            background-image: url('Presentation/Images/ljubljana.jpg');
+            background-image: url('/static/Images/ljubljana.jpg');
             background-size: cover; /* This ensures the image covers the whole background */
         }
     </style>
@@ -26,13 +26,12 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo center"><i class="material-icons">home</i></a>
+            <a href="/" class="brand-logo center"><i class="material-icons">home</i></a>
             <ul id="nav-mobile" class="left hide-on-med-and-down">
-                <!-- tuki naj še piše uporabniško ime uporabnika in njegovo vlogo-->
-                <li><a href="#" class="brand-logo"><i class="material-icons left">person</i>Person (Role)</a></li>
+                <li><a href="/jaz" class="brand-logo"><i class="material-icons left">person</i>moj profil</a></li>
             </ul>
             <ul class="right hide-on-med-and-down">
-                <li><a href="#"><i class="large material-icons">logout</i></a></li>
+                <li><a href="/odjava"><i class="large material-icons">logout</i></a></li>
             </ul>
         </div>
     </nav>
@@ -41,16 +40,16 @@
         <li>
             <div class="user-view">
                 <div class="background">
-                    <img src="Presentation/Images/ljubljana.jpg">
+                    <img src="/static/Images/ljubljana.jpg">
                 </div>
                 <a><span class="white-text name">Ime Priimek</span></a>
                 <a><span class="white-text email">instagram</span></a>
             </div>
         </li>
-        <li><a class="waves-effect" href="#"><i class="material-icons">thumb_up_off_alt</i>Likes</a></li>
-        <li><a class="waves-effect" href="#"><i class="material-icons">thumb_down_off_alt</i>Dislike</a></li>
+        <li><a class="waves-effect" href="/likes"><i class="material-icons">thumb_up_off_alt</i>Likes</a></li>
+        <li><a class="waves-effect" href="/dislikes"><i class="material-icons">thumb_down_off_alt</i>Dislike</a></li>
         <li><div class="divider"></div></li>
-        <li><a class="waves-effect" href="#"><i class="material-icons">favorite_border</i>Matches</a></li>
+        <li><a class="waves-effect" href="/matchi"><i class="material-icons">favorite_border</i>Matches</a></li>
     </ul>
     <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         

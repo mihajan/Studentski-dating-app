@@ -44,7 +44,7 @@ username2 = '2222222222222'  # Zamenjajte z dejanskim usernamem
 #for v in vsi_odgovori:
 #    print(v)
 #print(repo.oseba_matchi(username))
-print(repo.oseba_dislike(username2))
+#print(repo.oseba_dislike(username2))
 
 #repo.dodaj_vprasanje(Vprasanje(vprasanje="A to dela?"))
 #dela
@@ -78,8 +78,8 @@ oseba2 = Oseba(
     priimek="Kovač",
     kontakt_ig="maja.k"
 )
-repo.spremeni_emotion(oseba1, oseba2, "like")  
-repo.spremeni_emotion(oseba2, oseba1, "like") 
+#repo.spremeni_emotion(oseba1, oseba2, "like")  
+#repo.spremeni_emotion(oseba2, oseba1, "like") 
 
 odg = Odgovor(
     id=253,
@@ -87,4 +87,11 @@ odg = Odgovor(
     username='hruska'
 )
 
-repo.spremeni_odgovor(odg, 19)
+#repo.spremeni_odgovor(odg, 19)
+
+#a= repo.dobi_brezstika_osebeDTO('mihc')
+#for os in a:
+#    print(os.ime)
+
+b= repo.dobi_like_osebeDTO('hruska')
+print(b)

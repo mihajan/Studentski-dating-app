@@ -19,7 +19,7 @@ class Oseba:
 class OsebaDTO:
     username: str = field(default="")    
     ime: str = field(default="")
-    odgovori: Dict[int, str] = field(default_factory=dict)
+    odgovori: Dict[str, str] = field(default_factory=dict)
 
 @dataclass_json
 @dataclass
@@ -28,7 +28,7 @@ class OsebafullDTO:
     ime: str = field(default="")
     priimek: str = field(default="")
     kontakt_ig: str = field(default="")
-    odgovori: Dict[int, str] = field(default_factory=dict)
+    odgovori: Dict[str, str] = field(default_factory=dict)
 
 
 

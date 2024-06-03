@@ -44,10 +44,9 @@ def cookie_required(f):
 @get('/')
 @cookie_required
 def index():
-    """
-    Domača stran.
-    """
-    return "Hello, World!"  
+    username = request.get_cookie("uporabnik")
+    osebe_dto = service.dobi_brezstika_osebe(username)
+    return template('domaca_stran.html', osebe=osebe_dto, username=username)
 
 @post('/prijava')
 def prijava():
@@ -59,7 +58,7 @@ def prijava():
     password = request.forms.get('password')
 
     if not auth.obstaja_uporabnik(username):
-        return template("vprasanja.html", napaka="Uporabnik s tem imenom ne obstaja")
+        return template("prijava2.html", napaka="Uporabnik s tem imenom ne obstaja")
 
     prijava = auth.prijavi_uporabnika(username, password)
     if prijava:
@@ -98,15 +97,90 @@ def register():
     
     service.dodaj_osebo(username, ime, priimek, kontakt_ig)
     auth.dodaj_uporabnika(username, role, geslo)
-    redirect('/')
+    redirect('/questions')
 
 
-#@get('/')
-#def zacetek():
-#    return template(
-#        'zacetna_stran.html'
-#        )
+@get('/questions')
+@cookie_required
+def questions_get():
+    vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
+    return template('vprasanja2.html', vprasanja=vprasanja)
 
+@post('/questions')
+@cookie_required
+def questions_post():
+    username = request.get_cookie("uporabnik")
+    vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
+    for vprasanje in vprasanja:
+        odgovor = request.forms.get(f'vprasanje_{vprasanje.id}')
+        if odgovor:
+            service.dodaj_odgovor_uporabnika(username, int(odgovor))
+    
+    redirect(url('/'))
+
+
+#prikaz templatov za matche, like in dislike
+@get('/matchi')
+@cookie_required
+def matchi():
+    username = request.get_cookie("uporabnik")
+    matchi = service.dobi_matche_osebe(username)
+    return template('matchi.html', osebe=matchi)
+
+@get('/likes')
+@cookie_required
+def likes():
+    username = request.get_cookie("uporabnik")
+    osebe_dto = service.dobi_like_osebe(username)
+    return template('likes.html', osebe=osebe_dto)
+
+@get('/dislikes')
+@cookie_required
+def dislikes():
+    username = request.get_cookie("uporabnik")
+    osebe_dto = service.dobi_dislike_osebe(username)
+    #lahko kr isti html vrnemo k isto zgleda
+    return template('dislikes.html', osebe=osebe_dto)
+
+
+#dodajanje funkcionalnosti gumbom za like in dislike
+@post('/like')
+@cookie_required
+def like():
+    username1 = request.get_cookie("uporabnik")
+    username2 = request.forms.get('username2')
+    service.spremeni_emotion(username1, username2, 'like')
+    redirect(url('/'))
+
+@post('/dislike')
+@cookie_required
+def dislike():
+    username1 = request.get_cookie("uporabnik")
+    username2 = request.forms.get('username2')
+    service.spremeni_emotion(username1, username2, 'dislike')
+    redirect(url('/'))
+
+#prikaz samega sebi
+@get('/jaz')
+@cookie_required
+def jaz():
+    """
+    Stran za prikaz osebnih podatkov uporabnika.
+    """
+    username = request.get_cookie("uporabnik")
+    oseba = service.dobi_osebo(username)
+    return template('jaz.html', oseba=oseba)
+
+#spreminjanje odgovorov
+@post('/izbrisi_odgovore')
+@cookie_required
+def izbrisi_odgovore():
+    """
+    Izbriše vse odgovore uporabnika in preusmeri na stran z vprašanji.
+    """
+    username = request.get_cookie("uporabnik")
+    service.izbrisi_odgovore_uporabnika(username)
+    redirect(url('/questions'))
 
 #auth.dodaj_uporabnika('mihc', 'admin', 'mihc')
 #auth.dodaj_uporabnika('user1', 'admin', 'user1')

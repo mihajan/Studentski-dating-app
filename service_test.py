@@ -22,4 +22,10 @@ auth = AuthService()
 #service.dodaj_odgovor_uporabnika("hruska", 1)
 #service.dodaj_odgovor_uporabnika("hruska", 9)
 
-auth.prijavi_uporabnika('mihc', 'mihc')
+#auth.prijavi_uporabnika('mihc', 'mihc')
+
+test = service.dobi_brezstika_osebe('mihc')
+#for a in test:
+#    print(a)
+print(test)
+service.spremeni_emotion('test1', 'mihc', 'like')

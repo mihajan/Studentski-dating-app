@@ -42,26 +42,27 @@ class Repo:
             WHERE username = %s
         """, (username,))
         oseba = self.cur.fetchone()
-
+    
         if not oseba:
             return None  # Oseba ne obstaja
-
+    
         ime = oseba['ime']
         priimek = oseba['priimek']
         kontakt_ig = oseba['kontakt_ig']
-
-        # Pridobimo odgovore za določeno osebo
+    
+        # Pridobimo odgovore za določeno osebo skupaj z besedili vprašanj
         self.cur.execute("""
-            SELECT mo.id_vprasanja, mo.mozni_odgovor
+            SELECT v.vprasanje, mo.mozni_odgovor
             FROM Odgovor o
             JOIN Mozni_odgovor mo ON o.id_moznega_odgovora = mo.id
+            JOIN Vprasanje v ON mo.id_vprasanja = v.id
             WHERE o.username = %s
             ORDER BY o.id
         """, (username,))
         
         results = self.cur.fetchall()
-        odgovori = {row['id_vprasanja']: row['mozni_odgovor'] for row in results}
-
+        odgovori = {row['vprasanje']: row['mozni_odgovor'] for row in results}
+    
         # Ustvarimo instanco razreda OsebafullDTO
         oseba_full_dto = OsebafullDTO(
             username=username,
@@ -70,8 +71,9 @@ class Repo:
             kontakt_ig=kontakt_ig,
             odgovori=odgovori
         )
-
-        return oseba_full_dto    
+    
+        return oseba_full_dto
+   
     
     def dobi_oseboDTO(self, username: str) -> OsebaDTO:
         '''
@@ -87,17 +89,18 @@ class Repo:
 
         ime = oseba['ime']
 
-        # Pridobimo odgovore za določeno osebo
+        # Pridobimo odgovore za določeno osebo skupaj z besedili vprašanj
         self.cur.execute("""
-            SELECT mo.id_vprasanja, mo.mozni_odgovor
+            SELECT v.vprasanje, mo.mozni_odgovor
             FROM Odgovor o
             JOIN Mozni_odgovor mo ON o.id_moznega_odgovora = mo.id
+            JOIN Vprasanje v ON mo.id_vprasanja = v.id
             WHERE o.username = %s
             ORDER BY o.id
         """, (username,))
-        
+
         results = self.cur.fetchall()
-        odgovori = {row['id_vprasanja']: row['mozni_odgovor'] for row in results}
+        odgovori = {row['vprasanje']: row['mozni_odgovor'] for row in results}
 
         # Ustvarimo instanco razreda OsebaDTO
         oseba_dto = OsebaDTO(
@@ -107,6 +110,8 @@ class Repo:
         )
 
         return oseba_dto
+    
+        
 
 #metode za vprašanja in odgovore
     def dobi_vprasanje(self, id: int) -> Vprasanje:
@@ -237,6 +242,38 @@ class Repo:
         rezultati = self.cur.fetchall()
         return [OdgovorDTO(vprasanje=rezultat['vprasanje'], odgovor=rezultat['mozni_odgovor']) for rezultat in rezultati]
 
+    def dobi_vprasanja(self) -> List[Vprasanje]:
+        '''
+        Dobi vsa vprašanja
+        '''
+        self.cur.execute("""
+            SELECT id, vprasanje
+            FROM Vprasanje
+        """)
+        vprasanja = [Vprasanje.from_dict(t) for t in self.cur.fetchall()]
+        return vprasanja
+
+    def dobi_mozne_odgovore(self, id_vprasanja: int) -> List[Mozni_odgovor]:
+        '''
+        Pridobi vse možne odgovore za določeno vprašanje
+        '''
+        self.cur.execute("""
+            SELECT id, mozni_odgovor, id_vprasanja
+            FROM Mozni_odgovor
+            WHERE id_vprasanja = %s
+        """, (id_vprasanja,))
+        mozni_odgovori = [Mozni_odgovor.from_dict(t) for t in self.cur.fetchall()]
+        return mozni_odgovori
+    
+    def izbrisi_odgovore_osebe(self, username: str) -> None:
+        """
+        Izbriše vse odgovore za podano osebo.
+        """
+        self.cur.execute("""
+            DELETE FROM Odgovor
+            WHERE username = %s
+        """, (username,))
+        self.conn.commit()
 
 #Metode, ki se nanašajo na pridobivanje odgovorov.
 #teh mislm da po novem ne bova uporabiljala, ker bova uporabila te z DTO-ji
