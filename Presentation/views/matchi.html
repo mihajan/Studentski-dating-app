@@ -1,28 +1,39 @@
-% rebase("osnova.html")
-<div class="container">
-    <div class="row">
-        % for oseba in osebe:
-        <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <p><strong>Username:</strong> {{ oseba.username }}</p>
-                    <p><strong>Ime:</strong> {{ oseba.ime }}</p>
-                    <p><strong>Priimek:</strong> {{ oseba.priimek }}</p>
-                    <p><strong>Kontakt IG:</strong> {{ oseba.kontakt_ig }}</p>
-                    % for vprasanje, odgovor in oseba.odgovori.items():
-                    <p><strong>{{ vprasanje }}:</strong> {{ odgovor }}</p>
-                    % end
-                    </div>
-                    <div class="card-action">
-                        <form action="/dislike" method="post" style="display:inline;">
-                            <input type="hidden" name="username2" value="{{ oseba.username }}">
-                            <button type="submit" class="btn">Dislike</button>
-                        </form>
+  % rebase('osnova.html')
+    <div class="container">
+        <form action="/matchi" method="get">
+            <div class="input-field col s12">
+                <input type="text" name="filter_text" placeholder="Išči osebe z željenim odgovorom" value="{{ filter_text }}">
+                <button class="btn waves-effect waves-light" type="submit" name="action">Išči</button>
+            </div>
+        </form>
+        <div class="row">
+            % for oseba in osebe:
+                % if not filter_text or any(filter_text.lower() in odgovor.lower() for vprasanje, odgovor in oseba.odgovori.items()):
+                <div class="col s12 m6">
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text">
+                            <p><strong>Username:</strong> {{ oseba.username }}</p>
+                            <p><strong>Ime:</strong> {{ oseba.ime }}</p>
+                            % for vprasanje, odgovor in oseba.odgovori.items():
+                            <p><strong>{{ vprasanje }}:</strong> {{ odgovor }}</p>
+                            % end
+                        </div>
+                        <div class="card-action">
+                            <form action="/dislike" method="post" style="display:inline;">
+                                <input type="hidden" name="username2" value="{{ oseba.username }}">
+                                <button type="submit" class="btn">Dislike</button>
+                            </form>
+                        </div>
+                        
                     </div>
                 </div>
-            </div>
+                % end
+            % end
         </div>
-        % end
     </div>
-</div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
+
 

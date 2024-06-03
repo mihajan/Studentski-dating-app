@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Seznam Oseb</title>
-</head>
-<body>
-    <h1>Seznam Oseb</h1>
-    <ul>
-        % for oseba in osebe:
-            <li>{{oseba['username']}} - {{oseba['ime']}} {{oseba['priimek']}}</li>
-        % end
-    </ul>
-</body>
-</html>
+<div class="card-action">
+    <form action="/like" method="post" style="display:inline;">
+        <input type="hidden" name="username2" value="{{ oseba.username }}">
+        <button type="submit" class="btn">Like</button>
+    </form>
+    <form action="/dislike" method="post" style="display:inline;">
+        <input type="hidden" name="username2" value="{{ oseba.username }}">
+        <button type="submit" class="btn">Dislike</button>
+    </form>
+</div>

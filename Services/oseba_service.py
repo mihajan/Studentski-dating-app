@@ -89,4 +89,15 @@ class OsebaService:
         """
         self.repo.izbrisi_odgovore_osebe(username)
 
-    
+    def dobi_vsa_vprasanja(self) -> List[Vprasanje]:
+        """
+        Vrne vsa vprašanja kot seznam objektov Vprasanje.
+        """
+        return self.repo.dobi_vsa_vprasanja()
+
+    def dodaj_vprasanje(self, vprasanje_text: str) -> None:
+        """
+        Dodaj novo vprašanje.
+        """
+        vprasanje = Vprasanje(vprasanje=vprasanje_text)
+        self.repo.dodaj_vprasanje(vprasanje)

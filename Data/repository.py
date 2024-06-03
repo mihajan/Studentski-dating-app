@@ -275,6 +275,27 @@ class Repo:
         """, (username,))
         self.conn.commit()
 
+    def dobi_vsa_vprasanja(self) -> List[Vprasanje]:
+        """
+        Vrne vsa vprašanja kot seznam objektov Vprasanje.
+        """
+        self.cur.execute("""
+            SELECT id, vprasanje
+            FROM Vprasanje
+            ORDER BY id
+        """)
+        rows = self.cur.fetchall()
+
+        vprasanja = []
+        for row in rows:
+            vprasanje = Vprasanje(
+                id=row['id'],
+                vprasanje=row['vprasanje']
+            )
+            vprasanja.append(vprasanje)
+
+        return vprasanja
+
 #Metode, ki se nanašajo na pridobivanje odgovorov.
 #teh mislm da po novem ne bova uporabiljala, ker bova uporabila te z DTO-ji
     def dobi_odgovore_ids_za_osebo(self, username: str) -> List[int]:
@@ -528,3 +549,4 @@ class Repo:
             VALUES (%s, %s)
         """, (odgovor.id_moznega_odgovora, odgovor.username))
         self.conn.commit()
+
