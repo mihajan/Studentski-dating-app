@@ -150,9 +150,16 @@ def admin_register_post():
 @get('/urejanje')
 @cookie_required
 def urejanje():
+    username = request.get_cookie("uporabnik")
+    user = auth.dobi_uporabnika(username)
+    
+    if user.role != 'admin':
+        redirect(url('/'))
+    
     vprasanja = service.dobi_vsa_vprasanja()
     vprasanja_mozni_odgovori = service.dobi_vsa_vprasanja_in_mozne_odgovore()
     return template('urejanje.html', vprasanja=vprasanja, vprasanja_mozni_odgovori=vprasanja_mozni_odgovori)
+
 
 @post('/dodaj_vprasanje')
 @cookie_required

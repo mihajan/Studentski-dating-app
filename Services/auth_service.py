@@ -60,3 +60,6 @@ class AuthService:
         self.repo.dodaj_uporabnika(u)
 
         return UporabnikDto(username=uporabnik, role=rola)
+    
+    def dobi_uporabnika(self, username: str) -> Uporabnik:
+        return self.repo.dobi_uporabnika(username)

@@ -407,7 +407,17 @@ class Repo:
     def oseba_brezstika(self, username: str) -> List[str]:
         '''
         Vrne seznam usernamov vseh oseb, s katerimi nismo bili še v stiku
+        Izključi uporabnike z vlogo "admin"
         '''
+        # Najprej pridobimo vse usernamove, ki imajo vlogo admin
+        self.cur.execute("""
+            SELECT username
+            FROM Uporabnik
+            WHERE role = 'admin'
+        """)
+        admin_usernames = [row['username'] for row in self.cur.fetchall()]
+
+        # Sedaj pridobimo vse usernamove, s katerimi nismo bili še v stiku in izključimo admin uporabnike
         self.cur.execute("""
             SELECT o.username
             FROM Oseba o
@@ -418,9 +428,9 @@ class Repo:
                 WHERE e.username1 = %s
             )
         """, (username, username))
-        
+
         results = self.cur.fetchall()
-        usernames = [row['username'] for row in results]
+        usernames = [row['username'] for row in results if row['username'] not in admin_usernames]
         return usernames
 #-------------------------------------------------------------------------------------------------------
 #metode, ki jih bova dejansko klicala (vrnejo vse osebe za določen seznam za našga userja)
