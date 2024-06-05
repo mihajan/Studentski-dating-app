@@ -20,7 +20,7 @@ class AuthService:
         except:
             return False
         
-        
+
     def prijavi_uporabnika(self, uporabnik : str, geslo: str) -> Union[UporabnikDto,bool] :
 
         # Najprej dobimo uporabnika iz baze
