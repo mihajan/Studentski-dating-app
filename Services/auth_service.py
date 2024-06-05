@@ -1,5 +1,5 @@
 from Data.repository import Repo
-from Data.Models import *
+from Data.models import *
 from typing import Union
 import bcrypt
 from datetime import date
@@ -11,7 +11,9 @@ class AuthService:
          self.repo = Repo()
 
     def obstaja_uporabnik(self, uporabnik: str) -> bool:
-        #kaj je fora te funkcije če dejansko nč ne prevermo?
+        '''
+        Peveri če obstaja uporabnik
+        '''
         try:
             user = self.repo.dobi_uporabnika(uporabnik)
             return True

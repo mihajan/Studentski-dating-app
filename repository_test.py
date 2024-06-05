@@ -55,7 +55,7 @@ id_odgovora = 3  # Zamenjajte z dejanskim ID-jem odgovora
 
 #print(f"Vprašanje: {odgovor_dto.vprasanje}, Odgovor: {odgovor_dto.odgovor}")
 
-odgovori_dto = repo.dobi_odgovore_osebeDTO(username)
+#odgovori_dto = repo.dobi_odgovore_osebeDTO(username)
 
 #for v in odgovori_dto:
     #print(f"Vprašanje: {odgovor_dto.vprasanje}, Odgovor: {odgovor_dto.odgovor}")

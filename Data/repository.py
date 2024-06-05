@@ -1,14 +1,13 @@
 import psycopg2, psycopg2.extensions, psycopg2.extras
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo problemov s šumniki
-#import Data.auth_public as auth
-#import auth_public as auth
-#import auth as auth
-from . import auth
+import Data.auth_public as auth
+#import Data.auth as auth
+#from . import auth
 
 #from Data.Models import Oseba, Emotion, Vprasanje, Mozni_odgovor, Odgovor, OdgovorDTO
-from Data.models import Oseba, OsebaDTO, OsebafullDTO, Emotion, Vprasanje, VprasanjeDTO, Mozni_odgovor, Mozni_odgovorDTO,Odgovor, OdgovorDTO, Uporabnik, UporabnikDto
-from typing import List, Dict
-import datetime
+from Data.models import Oseba, OsebaDTO, OsebafullDTO, Emotion, Vprasanje, Mozni_odgovor, Odgovor, Uporabnik, UporabnikDto
+from typing import List
+
 
 ## V tej datoteki bomo implementirali razred Repo, ki bo vseboval metode za delo z bazo.
 
@@ -18,11 +17,13 @@ class Repo:
         self.conn = psycopg2.connect(database=auth.db, host=auth.host, user=auth.user, password=auth.password, port=5432)
         self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#metode za 
+ 
 
 #metode za pridobivanje oseb za različne uporabnike glede na njihov status
     def dobi_osebo(self, username: str) -> Oseba:
-        '''Tako vidiš sebe'''
+        '''
+        Uporabljamo za spreminjanje Emotionov
+        '''
         self.cur.execute("""
             SELECT username, ime, priimek, kontakt_ig
             FROM Oseba
@@ -30,10 +31,12 @@ class Repo:
         """, (username,))
         oseba = Oseba.from_dict(self.cur.fetchone())
         return oseba
-    
+
+#lahko bi meli samo fullDTO sam bi blo preveč za spreminjat
     def dobi_osebo_fullDTO(self, username: str) -> OsebafullDTO:
         '''
         Tako osebo vidijo matchi (vsi podatki kar jih imamo)
+        (kličemo ko rabimo seznam matchov)
         '''
         # Pridobimo podatke o osebi
         self.cur.execute("""
@@ -63,7 +66,7 @@ class Repo:
         results = self.cur.fetchall()
         odgovori = {row['vprasanje']: row['mozni_odgovor'] for row in results}
     
-        # Ustvarimo instanco razreda OsebafullDTO
+        # Ustvarimo OsebafullDTO
         oseba_full_dto = OsebafullDTO(
             username=username,
             ime=ime,
@@ -73,13 +76,13 @@ class Repo:
         )
     
         return oseba_full_dto
-   
-    
+       
     def dobi_oseboDTO(self, username: str) -> OsebaDTO:
         '''
         Tako osebo vidiš na searchu, like in dislike
+        (kličemo ko rabimo sezname oseb na zgornjih seznamih)
         '''
-        # Pridobimo podatke o osebi
+        # podatki o osebi
         self.cur.execute("""
             SELECT username, ime
             FROM Oseba
@@ -89,7 +92,7 @@ class Repo:
 
         ime = oseba['ime']
 
-        # Pridobimo odgovore za določeno osebo skupaj z besedili vprašanj
+        # Odgovori za osebo skupaj z besedili vprašanj
         self.cur.execute("""
             SELECT v.vprasanje, mo.mozni_odgovor
             FROM Odgovor o
@@ -102,7 +105,7 @@ class Repo:
         results = self.cur.fetchall()
         odgovori = {row['vprasanje']: row['mozni_odgovor'] for row in results}
 
-        # Ustvarimo instanco razreda OsebaDTO
+        # Ustvarimo  OsebaDTO
         oseba_dto = OsebaDTO(
             username=username,
             ime=ime,
@@ -111,33 +114,8 @@ class Repo:
 
         return oseba_dto
     
-        
-
+#-----------------------------------------------------------------------------------------------------    
 #metode za vprašanja in odgovore
-    def dobi_vprasanje(self, id: int) -> Vprasanje:
-        '''
-        Vrne celotno vprašanje z izbranim id
-        '''
-        self.cur.execute("""
-            SELECT id, vprasanje
-            FROM Vprasanje
-            WHERE id = %s
-        """, (id,))
-        vprasanje = self.cur.fetchone()
-        return Vprasanje.from_dict(vprasanje)
-
-    def dobi_vprasanjeDTO(self, id: int) -> VprasanjeDTO:
-        '''
-        Vrne samo besedilo vprašanja
-        '''
-        self.cur.execute("""
-            SELECT vprasanje
-            FROM Vprasanje
-            WHERE id = %s
-        """, (id,))
-        vprasanje = self.cur.fetchone()
-        return VprasanjeDTO.from_dict(vprasanje)
-
     def dodaj_vprasanje(self, vprasanje: Vprasanje):
         '''
         Doda novo vprašanje
@@ -146,101 +124,7 @@ class Repo:
             INSERT INTO Vprasanje (vprasanje)
             VALUES (%s)
         """, (vprasanje.vprasanje,))
-        self.conn.commit()
-
-    def dobi_mozni_odgovorDTO(self, id: int) -> Mozni_odgovorDTO:
-        '''
-        Vrne besedilo možnega odgovora za id
-        '''
-        self.cur.execute("""
-            SELECT mozni_odgovor
-            FROM Mozni_odgovor
-            WHERE id = %s
-        """, (id,))
-        
-        mozni_odgovor = self.cur.fetchone()
-        return Mozni_odgovorDTO(mozni_odgovor=mozni_odgovor['mozni_odgovor'])    
-
-    def dobi_mozni_odgovor(self, id: int) -> Mozni_odgovor:
-        '''
-        Vrne besedilo možnega odgovora za id
-        '''
-        self.cur.execute("""
-            SELECT id, mozni_odgovor, id_vprasanja
-            FROM Mozni_odgovor
-            WHERE id = %s
-        """, (id,))
-        
-        mozni_odgovor = self.cur.fetchone()
-        return Mozni_odgovor(mozni_odgovor=mozni_odgovor['mozni_odgovor'])
-
-    def spremeni_odgovor(self, odgovor: Odgovor, nov_id_moznega_odgovora: int) -> None:
-        '''
-        Spremeni id_moznega_odgovora za podan odgovor (username ne spreminjamo)
-        torej zamenjamo le odgovor nekega fiksnega uporabnika
-        '''
-        self.cur.execute("""
-            UPDATE Odgovor
-            SET id_moznega_odgovora = %s
-            WHERE id = %s
-        """, (nov_id_moznega_odgovora, odgovor.id))
-        self.conn.commit()      
-
-    def dobi_odgovor(self, id: int) -> Odgovor:
-        '''
-        Vrne vse kar pripada točno določenemu odgovoru
-        '''
-        self.cur.execute("""
-            SELECT id, id_moznega_odgovora, username
-            FROM Odgovor
-            WHERE id = %s
-        """, (id,))
-        
-        odgovor = self.cur.fetchone()
-        return Odgovor.from_dict(odgovor)
-
-    def dobi_odgovore_osebe(self, username: str) -> List[Odgovor]:
-        '''
-        Za določeno osebo vrne seznam vseh odgovorov
-        '''
-        self.cur.execute("""
-            SELECT id, id_moznega_odgovora, username
-            FROM Odgovor
-            WHERE username = %s
-        """, (username,))
-        
-        odgovori = self.cur.fetchall()
-        return [Odgovor.from_dict(odgovor) for odgovor in odgovori]
-
-    def dobi_odgovorDTO(self, id: int) -> OdgovorDTO:
-        '''
-        Vrne besedilo vprašanja in odgovora glede na Id odgovora
-        '''
-        self.cur.execute("""
-            SELECT v.vprasanje, mo.mozni_odgovor
-            FROM Odgovor o
-            JOIN Mozni_odgovor mo ON o.id_moznega_odgovora = mo.id
-            JOIN Vprasanje v ON mo.id_vprasanja = v.id
-            WHERE o.id = %s
-        """, (id,))
-        
-        rezultat = self.cur.fetchone()
-        return OdgovorDTO(vprasanje=rezultat['vprasanje'], odgovor=rezultat['mozni_odgovor'])
-
-    def dobi_odgovore_osebeDTO(self, username: str) -> List[OdgovorDTO]:
-        '''
-        Za določeno osebo vrne seznam vseh odgovorov v obliki objektov OdgovorDTO
-        '''
-        self.cur.execute("""
-            SELECT v.vprasanje, mo.mozni_odgovor
-            FROM Odgovor o
-            JOIN Mozni_odgovor mo ON o.id_moznega_odgovora = mo.id
-            JOIN Vprasanje v ON mo.id_vprasanja = v.id
-            WHERE o.username = %s
-        """, (username,))
-        
-        rezultati = self.cur.fetchall()
-        return [OdgovorDTO(vprasanje=rezultat['vprasanje'], odgovor=rezultat['mozni_odgovor']) for rezultat in rezultati]
+        self.conn.commit()       
 
     def dobi_vprasanja(self) -> List[Vprasanje]:
         '''
@@ -275,70 +159,35 @@ class Repo:
         """, (username,))
         self.conn.commit()
 
-    def dobi_vsa_vprasanja(self) -> List[Vprasanje]:
-        """
-        Vrne vsa vprašanja kot seznam objektov Vprasanje.
-        """
-        self.cur.execute("""
-            SELECT id, vprasanje
-            FROM Vprasanje
-            ORDER BY id
-        """)
-        rows = self.cur.fetchall()
-
-        vprasanja = []
-        for row in rows:
-            vprasanje = Vprasanje(
-                id=row['id'],
-                vprasanje=row['vprasanje']
-            )
-            vprasanja.append(vprasanje)
-
-        return vprasanja
-
-#Metode, ki se nanašajo na pridobivanje odgovorov.
-#teh mislm da po novem ne bova uporabiljala, ker bova uporabila te z DTO-ji
-    def dobi_odgovore_ids_za_osebo(self, username: str) -> List[int]:
+    def dodaj_mozni_odgovor(self, mozni_odgovor: Mozni_odgovor) -> None:
         '''
-        Za določeno osebo vrne seznam idjev odgovorov na katere je oseba odgovorila
+        Doda nov možni odgovor (id se sam nardi)
         '''
         self.cur.execute("""
-            SELECT id_moznega_odgovora
-            FROM Odgovor
-            WHERE username = %s
-            ORDER BY id
-        """, (username,))
-        
-        results = self.cur.fetchall()
-        answer_ids = [row["id_moznega_odgovora"] for row in results]
-        return answer_ids
-    
-    def dobi_odgovore_texts_za_osebo(self, username: str) -> List[str]:
+            INSERT INTO Mozni_odgovor (mozni_odgovor, id_vprasanja)
+            VALUES (%s, %s)
+        """, (mozni_odgovor.mozni_odgovor, mozni_odgovor.id_vprasanja))
+        self.conn.commit()
+
+    def dodaj_odgovor(self, odgovor: Odgovor) -> None:
         '''
-        Za določeno osebo vrne seznam besedil odgovorov na katere je oseba odgovorila.
+        Zapiše kaj je odgovoril user
         '''
         self.cur.execute("""
-            SELECT mo.mozni_odgovor
-            FROM Odgovor o
-            JOIN Mozni_odgovor mo ON o.id_moznega_odgovora = mo.id
-            WHERE o.username = %s
-            ORDER BY o.id
-        """, (username,))
-        
-        results = self.cur.fetchall()
-        answer_texts = [row['mozni_odgovor'] for row in results]
-        return answer_texts
+            INSERT INTO Odgovor (id_moznega_odgovora, username)
+            VALUES (%s, %s)
+        """, (odgovor.id_moznega_odgovora, odgovor.username))
+        self.conn.commit()
 
-
+#-----------------------------------------------------------------------------------------------------
 #Metode, ki se nanašajo na emotione 
-
     def spremeni_emotion(self, oseba1: Oseba, oseba2: Oseba, vrednost: str) -> None:
         '''
         Spremeni ali doda vrednost za podan par v tabeli Emotion.
-        Vrednost je lahko 'like', 'dislike' ali 'block'.
+        Vrednost je lahko 'like', 'dislike'
         '''
         if vrednost not in ['like', 'dislike', 'block']:
-            raise ValueError("Vrednost mora biti 'like', 'dislike' ali 'block'")
+            raise ValueError("Vrednost mora biti 'like' ali 'dislike'")
 
         self.cur.execute("""
             SELECT 1 FROM Emotion WHERE username1 = %s AND username2 = %s
@@ -432,9 +281,9 @@ class Repo:
         results = self.cur.fetchall()
         usernames = [row['username'] for row in results if row['username'] not in admin_usernames]
         return usernames
+
 #-------------------------------------------------------------------------------------------------------
 #metode, ki jih bova dejansko klicala (vrnejo vse osebe za določen seznam za našga userja)
-#pozor: te motode se sklicujejo na zgornje metode in jih je zato nevarno preurejati
     def dobi_like_osebeDTO(self, username: str) -> List[OsebaDTO]:
         '''
         Za podan username prikaže vse ki bodo na prikazani pod like.
@@ -491,6 +340,7 @@ class Repo:
             if oseba_dto:
                 oseba_dto_list.append(oseba_dto)
         return oseba_dto_list
+
 #-------------------------------------------------------------------------------------------------------
 #Metode za upravljanje uporabnikov
     def dodaj_osebo(self, oseba: Oseba):
@@ -514,14 +364,12 @@ class Repo:
             print(f"Oseba z takim usernamom {e} že obstaja!!")
             raise e
 
-
     def dodaj_uporabnika(self, uporabnik: Uporabnik):
         self.cur.execute("""
             INSERT into Uporabnik(username, role, password_hash, last_login)
             VALUES (%s, %s, %s, %s)
             """, (uporabnik.username,uporabnik.role, uporabnik.password_hash, uporabnik.last_login))
         self.conn.commit()
-
 
     def dobi_uporabnika(self, username:str) -> Uporabnik:
         self.cur.execute("""
@@ -539,24 +387,5 @@ class Repo:
             """, (uporabnik.last_login,uporabnik.username))
         self.conn.commit()
 
-#dodajanje novih odgovorov
-    def dodaj_mozni_odgovor(self, mozni_odgovor: Mozni_odgovor) -> None:
-        '''
-        Doda nov možni odgovor (id se sam nardi)
-        '''
-        self.cur.execute("""
-            INSERT INTO Mozni_odgovor (mozni_odgovor, id_vprasanja)
-            VALUES (%s, %s)
-        """, (mozni_odgovor.mozni_odgovor, mozni_odgovor.id_vprasanja))
-        self.conn.commit()
 
-    def dodaj_odgovor(self, odgovor: Odgovor) -> None:
-        '''
-        Zapiše kaj je odgovoril user
-        '''
-        self.cur.execute("""
-            INSERT INTO Odgovor (id_moznega_odgovora, username)
-            VALUES (%s, %s)
-        """, (odgovor.id_moznega_odgovora, odgovor.username))
-        self.conn.commit()
 

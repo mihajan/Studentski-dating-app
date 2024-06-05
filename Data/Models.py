@@ -47,9 +47,6 @@ class Vprasanje:
     id: int = field(default=0)
     vprasanje: str = field(default="")
 
-class VprasanjeDTO:
-    vprasanje: str = field(default="")
-
 @dataclass_json
 @dataclass
 class Mozni_odgovor:
@@ -59,24 +56,10 @@ class Mozni_odgovor:
 
 @dataclass_json
 @dataclass
-class Mozni_odgovorDTO:
-    mozni_odgovor: str = field(default="")
-
-
-@dataclass_json
-@dataclass
 class Odgovor:
     id: int = field(default=0)
     id_moznega_odgovora: int = field(default=0)
     username: int = field(default="")
-
-
-@dataclass_json
-@dataclass
-class OdgovorDTO:
-    vprasanje: str = field(default="") #dodatno celo besedilo vprašanja
-    odgovor: str = field(default="") #dodatno celo besedilo odgovora
-
 
 @dataclass_json
 @dataclass
@@ -85,7 +68,6 @@ class Uporabnik:
     role: str = field(default="")
     password_hash: str = field(default="")
     last_login: str = field(default="")
-
 
 @dataclass
 class UporabnikDto:

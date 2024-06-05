@@ -25,29 +25,20 @@ class OsebaService:
         return self.repo.dobi_dislike_osebeDTO(username)
     
     def dobi_brezstika_osebe(self, username) -> List[OsebaDTO]:
-        '''Prikaz osnovnem "search" meniju'''
+        '''Prikaz osnovnem home meniju'''
         return self.repo.dobi_brezstika_osebeDTO(username)
         
     def dobi_matche_osebe(self, username) -> List[OsebafullDTO]:
         '''Prikaz na meniju kjer so tvoji matchi'''
         return self.repo.dobi_matche_osebefullDTO(username)        
 
-    
     def spremeni_emotion(self, username1: str, username2: str, vrednost: str) -> None:
         '''Spremeni ali doda emotion med dvema osebama'''
         oseba1 = self.repo.dobi_osebo(username1)
         oseba2 = self.repo.dobi_osebo(username2)
         self.repo.spremeni_emotion(oseba1, oseba2, vrednost)
 
-    def dobi_vsa_vprasanja_in_mozne_odgovore(self) -> List[Vprasanje]:
-        '''
-        Pridobi vsa vprašanja in njihove možne odgovore
-        '''
-        vprasanja = self.repo.dobi_vprasanja()
-        for vprasanje in vprasanja:
-            mozni_odgovori = self.repo.dobi_mozne_odgovore(vprasanje.id)
-            vprasanje.mozni_odgovori = mozni_odgovori
-        return vprasanja
+
 
 #dodajanje oseb, uporabnikov
 
@@ -60,7 +51,17 @@ class OsebaService:
         self.repo.dodaj_uporabnika(uporabnik)
 
 
-#treba dodat metode ki bodo zabeležile odgovore ko se boš registriral.
+#delo z vprašanji in odgovori
+    def dobi_vsa_vprasanja_in_mozne_odgovore(self) -> List[Vprasanje]:
+        '''
+        prikazovanje adminu katera vprašanja obstajajo
+        '''
+        vprasanja = self.repo.dobi_vprasanja()
+        for vprasanje in vprasanja:
+            mozni_odgovori = self.repo.dobi_mozne_odgovore(vprasanje.id)
+            vprasanje.mozni_odgovori = mozni_odgovori
+        return vprasanja
+
 
     def dodaj_mozni_odgovor(self, mozni_odgovor: str, id_vprasanja: int) -> None:
         '''
@@ -75,14 +76,6 @@ class OsebaService:
         '''
         odgovor = Odgovor(id_moznega_odgovora=id_moznega_odgovora, username=username)
         self.repo.dodaj_odgovor(odgovor)
- 
- #mislm da se ne uporabla
-    def spremeni_odgovor_uporabnika(self, id: int, nov_id_moznega_odgovora: int) -> None:
-        '''
-        Spremeni odgovor uporabnika (user ostane isti)
-        '''
-        odgovor = self.repo.dobi_odgovor(id)
-        self.repo.spremeni_odgovor(odgovor, nov_id_moznega_odgovora)
 
     def izbrisi_odgovore_uporabnika(self, username: str) -> None:
         """
@@ -94,7 +87,7 @@ class OsebaService:
         """
         Vrne vsa vprašanja kot seznam objektov Vprasanje.
         """
-        return self.repo.dobi_vsa_vprasanja()
+        return self.repo.dobi_vprasanja()
 
     def dodaj_vprasanje(self, vprasanje_text: str) -> None:
         """
