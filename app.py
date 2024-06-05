@@ -24,7 +24,7 @@ def cookie_required(f):
         return template("prijava2.html", uporabnik=None, rola=None, napaka="Potrebna je prijava!")
     return decorated
 
-#tole vsaj zaenkrat še ne naredi nič
+
 # Določimo statične datoteke
 @route('/static/<filename:path>')
 def static(filename):

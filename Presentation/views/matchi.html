@@ -14,8 +14,10 @@
                         <div class="card-content white-text">
                             <p><strong>Username:</strong> {{ oseba.username }}</p>
                             <p><strong>Ime:</strong> {{ oseba.ime }}</p>
+                            <p><strong>Priimek:</strong> {{ oseba.priimek }}</p>
+                            <p><strong>Instagram:</strong> {{ oseba.kontakt_ig }}</p>
                             % for vprasanje, odgovor in oseba.odgovori.items():
-                            <p><strong>{{ vprasanje }}:</strong> {{ odgovor }}</p>
+                            <p><strong>{{ vprasanje }}</strong> {{ odgovor }}</p>
                             % end
                         </div>
                         <div class="card-action">

@@ -25,7 +25,7 @@
                             <p><strong>Username:</strong> {{ oseba.username }}</p>
                             <p><strong>Ime:</strong> {{ oseba.ime }}</p>
                             % for vprasanje, odgovor in oseba.odgovori.items():
-                            <p><strong>{{ vprasanje }}:</strong> {{ odgovor }}</p>
+                            <p><strong>{{ vprasanje }}</strong> {{ odgovor }}</p>
                             % end
                         </div>
                         <div class="card-action">

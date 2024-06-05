@@ -76,6 +76,7 @@ class OsebaService:
         odgovor = Odgovor(id_moznega_odgovora=id_moznega_odgovora, username=username)
         self.repo.dodaj_odgovor(odgovor)
  
+ #mislm da se ne uporabla
     def spremeni_odgovor_uporabnika(self, id: int, nov_id_moznega_odgovora: int) -> None:
         '''
         Spremeni odgovor uporabnika (user ostane isti)
