@@ -158,7 +158,7 @@ def urejanje():
     
     vprasanja = service.dobi_vsa_vprasanja()
     vprasanja_mozni_odgovori = service.dobi_vsa_vprasanja_in_mozne_odgovore()
-    return template('urejanje.html', vprasanja=vprasanja, vprasanja_mozni_odgovori=vprasanja_mozni_odgovori)
+    return template('urejanje2.html', vprasanja=vprasanja, vprasanja_mozni_odgovori=vprasanja_mozni_odgovori)
 
 
 @post('/dodaj_vprasanje')
@@ -261,6 +261,18 @@ def izbrisi_odgovore():
     username = request.get_cookie("uporabnik")
     service.izbrisi_odgovore_uporabnika(username)
     redirect(url('/questions'))
+
+
+@post('/izbrisi_vprasanje')
+@cookie_required
+def izbrisi_vprasanje():
+    """
+    Izbriše vprašanje in vse možne odgovore nanj.
+    """
+    vprasanje_id = request.forms.get('vprasanje_id')
+    if vprasanje_id:
+        service.izbrisi_vprasanje_in_odgovore(int(vprasanje_id))
+    redirect('/urejanje')  
 
 #auth.dodaj_uporabnika('mihc', 'admin', 'mihc')
 #auth.dodaj_uporabnika('user1', 'admin', 'user1')

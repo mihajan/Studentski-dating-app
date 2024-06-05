@@ -389,3 +389,52 @@ class Repo:
 
 
 
+#--------------------------------------
+#brisanje vprašanj in možnih odgovorov
+
+    def izbrisi_mozne_odgovore(self, id_vprasanja: int) -> None:
+        '''
+        Izbriše vse možne odgovore za podano vprašanje
+        '''
+        try:
+            self.cur.execute("""
+                DELETE FROM Mozni_odgovor
+                WHERE id_vprasanja = %s
+            """, (id_vprasanja,))
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        
+    
+    def izbrisi_vprasanje(self, id_vprasanja: int) -> None:
+        '''
+        Izbriše vprašanje iz baze
+        '''
+        try:
+            self.cur.execute("""
+                DELETE FROM Vprasanje
+                WHERE id = %s
+            """, (id_vprasanja,))
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        
+    def izbrisi_odgovore_za_vprasanje(self, id_vprasanja: int) -> None:
+        '''
+        Izbriše vse vnose v tabeli Odgovor, ki se navezujejo na podano vprašanje
+        '''
+        try:
+            self.cur.execute("""
+                DELETE FROM Odgovor
+                WHERE id_moznega_odgovora IN (
+                    SELECT id
+                    FROM Mozni_odgovor
+                    WHERE id_vprasanja = %s
+                )
+            """, (id_vprasanja,))
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            raise e
