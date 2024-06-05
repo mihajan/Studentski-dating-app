@@ -10,6 +10,7 @@ class AuthService:
     def __init__(self):
          self.repo = Repo()
 
+
     def obstaja_uporabnik(self, uporabnik: str) -> bool:
         '''
         Peveri če obstaja uporabnik
