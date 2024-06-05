@@ -120,7 +120,17 @@ class Repo:
             INSERT INTO Vprasanje (vprasanje)
             VALUES (%s)
         """, (vprasanje.vprasanje,))
-        self.conn.commit()       
+        self.conn.commit()  
+
+    def izbrisi_vprasanje(self, vprasanje_id: int):
+        '''
+        Izbriše vprašanje
+        '''
+        self.cur.execute("""
+            DELETE FROM Vprasanje
+            WHERE id = %s
+        """, (vprasanje_id,))
+        self.conn.commit()     
 
     def dobi_vprasanja(self) -> List[Vprasanje]:
         '''

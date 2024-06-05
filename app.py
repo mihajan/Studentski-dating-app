@@ -176,6 +176,13 @@ def dodaj_mozni_odgovor():
     service.dodaj_mozni_odgovor(mozni_odgovor, int(vprasanje_id))
     redirect('/urejanje')
 
+@post('/izbrisi_vprasanje')
+@cookie_required
+def izbrisi_vprasanje():
+    vprasanje_id = request.forms.get('vprasanje_id')
+    service.izbrisi_vprasanje(int(vprasanje_id))
+    redirect('/urejanje')
+
 #--------------------------------------------------------------------
 #stran za odgovarjanje na vprašanja
 @get('/questions')

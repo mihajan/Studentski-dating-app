@@ -93,3 +93,9 @@ class OsebaService:
         """
         vprasanje = Vprasanje(vprasanje=vprasanje_text)
         self.repo.dodaj_vprasanje(vprasanje)
+
+    def izbrisi_vprasanje(self, vprasanje_id: int) -> None:
+        """
+        Izbriši vprašanje.
+        """
+        self.repo.izbrisi_vprasanje(vprasanje_id)
