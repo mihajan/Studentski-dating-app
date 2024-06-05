@@ -5,6 +5,7 @@ from typing import List
 
 # V tej datoteki bomo definirali razred za obdelavo in delo z osebami in njihovimi matchi
 
+
 class OsebaService:
     def __init__(self) -> None:
         # Potrebovali bomo instanco repozitorija. Po drugi strani bi tako instanco 
@@ -39,9 +40,7 @@ class OsebaService:
         self.repo.spremeni_emotion(oseba1, oseba2, vrednost)
 
 
-
 #dodajanje oseb, uporabnikov
-
     def dodaj_osebo(self, username: str, ime: str, priimek: str, kontakt_ig: str) -> None:
         oseba = Oseba(username=username, ime=ime, priimek=priimek, kontakt_ig=kontakt_ig)
         self.repo.dodaj_osebo(oseba)
@@ -61,7 +60,6 @@ class OsebaService:
             mozni_odgovori = self.repo.dobi_mozne_odgovore(vprasanje.id)
             vprasanje.mozni_odgovori = mozni_odgovori
         return vprasanja
-
 
     def dodaj_mozni_odgovor(self, mozni_odgovor: str, id_vprasanja: int) -> None:
         '''

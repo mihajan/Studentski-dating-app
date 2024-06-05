@@ -1,15 +1,12 @@
 import psycopg2, psycopg2.extensions, psycopg2.extras
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo problemov s šumniki
 import Data.auth_public as auth
-#import Data.auth as auth
-#from . import auth
-
-#from Data.Models import Oseba, Emotion, Vprasanje, Mozni_odgovor, Odgovor, OdgovorDTO
 from Data.models import Oseba, OsebaDTO, OsebafullDTO, Emotion, Vprasanje, Mozni_odgovor, Odgovor, Uporabnik, UporabnikDto
 from typing import List
 
 
 ## V tej datoteki bomo implementirali razred Repo, ki bo vseboval metode za delo z bazo.
+
 
 class Repo:
     def __init__(self):
@@ -18,7 +15,6 @@ class Repo:
         self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
  
-
 #metode za pridobivanje oseb za različne uporabnike glede na njihov status
     def dobi_osebo(self, username: str) -> Oseba:
         '''

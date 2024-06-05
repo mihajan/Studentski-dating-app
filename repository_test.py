@@ -78,6 +78,15 @@ oseba2 = Oseba(
     priimek="Kovač",
     kontakt_ig="maja.k"
 )
+
+oseba3 = Oseba(
+    username="user3",
+    ime="Živa",
+    priimek="Kovač",
+    kontakt_ig="ziva.k"
+)
+
+repo.dodaj_osebo(oseba3)
 #repo.spremeni_emotion(oseba1, oseba2, "like")  
 #repo.spremeni_emotion(oseba2, oseba1, "like") 
 
