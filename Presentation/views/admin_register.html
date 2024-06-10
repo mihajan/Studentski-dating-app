@@ -35,13 +35,19 @@
         .center-align-button .btn {
             margin: 0 1.5cm;
         }
+
+        .error-message {
+            color: #e91e63; /* Materialize pink color */
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
 <body>
     <nav>
         <div class="nav-wrapper">
-            <span class="brand-logo center">Admin Registracija</span>
+            <span class="brand-logo center">Registracija skrbnika</span>
         </div>
     </nav>
     <div class="container">
@@ -51,14 +57,19 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <i class="material-icons prefix">account_circle</i>
-                            <input id="username" name="username" type="text" class="validate">
+                            <input id="username" name="username" type="text" class="validate" required>
                             <label for="username">Uporabniško ime</label>
+                            % if error_message:
+                            <div class="error-message">
+                                {{error_message}}
+                            </div>
+                            % end
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
                             <i class="material-icons prefix">lock</i>
-                            <input id="geslo" name="geslo" type="password" class="validate">
+                            <input id="geslo" name="geslo" type="password" class="validate" required>
                             <label for="geslo">Geslo</label>
                         </div>
                     </div>
@@ -71,8 +82,6 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 
 </html>

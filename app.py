@@ -91,21 +91,28 @@ def odjava():
 
 @get('/register')
 def register():
-    return template('registracija2.html')
+    return template('registracija.html', error_message=None)
 
 @post('/register')
 def register_post():
-    username = request.forms.get('username')
-    ime = request.forms.get('ime')
-    priimek = request.forms.get('priimek')
-    geslo = request.forms.get('geslo')
-    kontakt_ig = request.forms.get('kontakt_ig')
+    username = request.forms.get('username').encode('iso-8859-1').decode('utf-8')
+    ime = request.forms.get('ime').encode('iso-8859-1').decode('utf-8')
+    priimek = request.forms.get('priimek').encode('iso-8859-1').decode('utf-8')
+    geslo = request.forms.get('geslo').encode('iso-8859-1').decode('utf-8')
+    kontakt_ig = request.forms.get('kontakt_ig').encode('iso-8859-1').decode('utf-8')
     role = 'user'
 
-    service.dodaj_osebo(username, ime, priimek, kontakt_ig)
-    auth.dodaj_uporabnika(username, role, geslo)
-    response.set_cookie("uporabnik", username)
-    redirect('/questions')
+    oseba = service.dobi_osebo(username)
+
+    if oseba is not None:
+        error_message = "Uporabniško ime je že zasedeno."
+        return template('registracija.html', error_message=error_message)
+    else:
+        service.dodaj_osebo(username, ime, priimek, kontakt_ig)
+        auth.dodaj_uporabnika(username, role, geslo)
+        response.set_cookie("uporabnik", username)
+        redirect('/questions')
+
 
 @get('/izbira_role')
 def izbira_role():
@@ -119,6 +126,8 @@ def izbira_role_post():
     elif role == 'user':
         redirect('/register')
 
+#-------------------------------------------------------------------
+#prijava za admina
 @get('/admin_auth')
 def admin_auth():
     return template('admin_aktivacija.html')
@@ -133,17 +142,25 @@ def admin_auth_post():
 
 @get('/admin_register')
 def admin_register():
-    return template('admin_register.html')
+    return template('admin_register.html', error_message=None)
 
 @post('/admin_register')
 def admin_register_post():
-    username = request.forms.get('username')
-    geslo = request.forms.get('geslo')
+    username = request.forms.get('username').encode('iso-8859-1').decode('utf-8')
+    geslo = request.forms.get('geslo').encode('iso-8859-1').decode('utf-8')
     role = 'admin'
-    service.dodaj_osebo(username, 'ime', 'priimek', 'kontakt_ig')
-    auth.dodaj_uporabnika(username, role, geslo)
-    response.set_cookie("uporabnik", username)
-    redirect('/urejanje')
+    
+
+    oseba = service.dobi_osebo(username)
+
+    if oseba is not None:
+        error_message = "Uporabniško ime je že zasedeno."
+        return template('admin_register.html', error_message=error_message)
+    else:
+        service.dodaj_osebo(username, 'ime', 'priimek', 'kontakt_ig')
+        auth.dodaj_uporabnika(username, role, geslo)
+        response.set_cookie("uporabnik", username)
+        redirect('/urejanje')
 
 #-------------------------------------------------------------------
 #dodajanje vprašanj in možnih odgovorov (za admine)
@@ -164,7 +181,7 @@ def urejanje():
 @post('/dodaj_vprasanje')
 @cookie_required
 def dodaj_vprasanje():
-    vprasanje_text = request.forms.get('vprasanje')
+    vprasanje_text = request.forms.get('vprasanje').encode('iso-8859-1').decode('utf-8')
     service.dodaj_vprasanje(vprasanje_text)
     redirect('/urejanje')
 
@@ -172,7 +189,7 @@ def dodaj_vprasanje():
 @cookie_required
 def dodaj_mozni_odgovor():
     vprasanje_id = request.forms.get('vprasanje_id')
-    mozni_odgovor = request.forms.get('mozni_odgovor')
+    mozni_odgovor = request.forms.get('mozni_odgovor').encode('iso-8859-1').decode('utf-8')
     service.dodaj_mozni_odgovor(mozni_odgovor, int(vprasanje_id))
     redirect('/urejanje')
 

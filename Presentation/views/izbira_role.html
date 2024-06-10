@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Izbira Role</title>
+    <title>Izbira vloge</title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -31,18 +31,18 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-            <span class="brand-logo center">Izbira Role</span>
+            <span class="brand-logo center">Izbira vloge</span>
         </div>
     </nav>
     <div class="container">
         <div class="row center-align-button">
             <form action="/izbira_role" method="post">
                 <button class="btn waves-effect waves-light" type="submit" name="role" value="admin">
-                    Admin
+                    Skrbnik (admin)
                     <i class="material-icons right">supervisor_account</i>
                 </button>
                 <button class="btn waves-effect waves-light" type="submit" name="role" value="user">
-                    User
+                    Uporabnik (user)
                     <i class="material-icons right">person</i>
                 </button>
             </form>
