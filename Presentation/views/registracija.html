@@ -46,10 +46,10 @@
                         <i class="material-icons prefix">account_circle</i>
                         <input id="username" type="text" name="username" class="validate" required>
                         <label for="username">Uporabniško ime</label>
-                        % if error_message:
-                        <div class="error-message">
-                            {{error_message}}
-                        </div>
+                        % if napaka:
+                            <div class="error-message">
+                                {{napaka}}
+                            </div>
                         % end
                     </div>
                 </div>

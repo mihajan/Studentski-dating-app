@@ -52,7 +52,8 @@ def index():
     else:
         filter_text = request.query.filter_text or ''
         osebe_dto = service.dobi_brezstika_osebe(username)
-        return template('domaca_stran.html', osebe=osebe_dto, filter_text=filter_text)
+        oseba = service.dobi_osebo(username)
+        return template('domaca_stran.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
 
 
 @post('/prijava')
@@ -91,7 +92,7 @@ def odjava():
 
 @get('/register')
 def register():
-    return template('registracija.html', error_message=None)
+    return template('registracija.html', napaka = None)
 
 @post('/register')
 def register_post():
@@ -105,8 +106,7 @@ def register_post():
     oseba = service.dobi_osebo(username)
 
     if oseba is not None:
-        error_message = "Uporabniško ime je že zasedeno."
-        return template('registracija.html', error_message=error_message)
+        return template('registracija.html', napaka = "Uporabniško ime je že zasedeno.")
     else:
         service.dodaj_osebo(username, ime, priimek, kontakt_ig)
         auth.dodaj_uporabnika(username, role, geslo)
@@ -130,7 +130,7 @@ def izbira_role_post():
 #prijava za admina
 @get('/admin_auth')
 def admin_auth():
-    return template('admin_aktivacija.html')
+    return template('admin_aktivacija.html', napaka = None)
 
 @post('/admin_auth')
 def admin_auth_post():
@@ -138,11 +138,11 @@ def admin_auth_post():
     if auth_code == '123':  # zamenjajte z dejansko avtorizacijsko kodo
         redirect('/admin_register')
     else:
-        return template('admin_aktivacija.html', napaka="Napačna avtorizacijska koda.")
+        return template('admin_aktivacija.html', napaka = "Napačna avtorizacijska koda.")
 
 @get('/admin_register')
 def admin_register():
-    return template('admin_register.html', error_message=None)
+    return template('admin_register.html', napaka = None)
 
 @post('/admin_register')
 def admin_register_post():
@@ -154,8 +154,7 @@ def admin_register_post():
     oseba = service.dobi_osebo(username)
 
     if oseba is not None:
-        error_message = "Uporabniško ime je že zasedeno."
-        return template('admin_register.html', error_message=error_message)
+        return template('admin_register.html', napaka = "Uporabniško ime je že zasedeno.")
     else:
         service.dodaj_osebo(username, 'ime', 'priimek', 'kontakt_ig')
         auth.dodaj_uporabnika(username, role, geslo)
@@ -228,7 +227,8 @@ def matchi():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_matche_osebe(username)
-    return template('matchi.html', osebe=osebe_dto, filter_text=filter_text)
+    oseba = service.dobi_osebo(username)
+    return template('matchi.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
 
 @get('/likes')
 @cookie_required
@@ -236,7 +236,8 @@ def likes():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_like_osebe(username)
-    return template('likes.html', osebe=osebe_dto, filter_text=filter_text)
+    oseba = service.dobi_osebo(username)
+    return template('likes.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
 
 @get('/dislikes')
 @cookie_required
@@ -244,7 +245,8 @@ def dislikes():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_dislike_osebe(username)
-    return template('dislikes.html', osebe=osebe_dto, filter_text=filter_text)
+    oseba = service.dobi_osebo(username)
+    return template('dislikes.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
 
 
 #dodajanje funkcionalnosti gumbom za like in dislike
@@ -297,9 +299,6 @@ def izbrisi_vprasanje():
     if vprasanje_id:
         service.izbrisi_vprasanje_in_odgovore(int(vprasanje_id))
     redirect('/urejanje')  
-
-#auth.dodaj_uporabnika('mihc', 'admin', 'mihc')
-#auth.dodaj_uporabnika('user1', 'admin', 'user1')
 
 
 run(host="localhost", port=SERVER_PORT, reloader=True)

@@ -35,6 +35,12 @@
         .center-align-button .btn {
             margin: 0 1.5cm;
         }
+
+        .error-message {
+            color: #e91e63; /* Materialize pink color */
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -48,6 +54,11 @@
         <div class="form-container">
             <div class="row">
                 <form class="col s12" method="POST" action="/prijava">
+                    % if napaka:
+                            <div class="error-message">
+                                {{napaka}}
+                            </div>
+                    % end
                     <div class="row">
                         <div class="input-field col s12">
                             <i class="material-icons prefix">account_circle</i>

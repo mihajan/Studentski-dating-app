@@ -30,6 +30,12 @@
         .center-align-button .btn {
             margin: 0 1.5cm;
         }
+
+        .error-message {
+            color: #e91e63; /* Materialize pink color */
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -43,6 +49,11 @@
         <div class="row">
             <form id="activation-form" action="/admin_auth" method="post">
                 <div class="row">
+                    % if napaka:
+                                <div class="error-message">
+                                    {{napaka}}
+                                </div>
+                    % end
                     <div class="input-field col s12">
                         <input id="aktivacija" type="text" name="aktivacija" class="validate">
                         <label for="aktivacija">Aktivacijska koda</label>
