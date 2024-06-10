@@ -34,7 +34,7 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-            <a class="brand-logo center">Urejanje</a>
+            <a href="#" class="brand-logo center">Urejanje</a>
             <ul class="right hide-on-med-and-down">
                 <li><a href="/odjava"><i class="material-icons">logout</i></a></li>
             </ul>
@@ -79,12 +79,6 @@
             </div>
         </div>
         <div class="row">
-            <!-- to dela sam za vprašanja, ki še nimajo možnih odgovorv. Hotla sm v sql dat
-            ALTER TABLE mozni_odgovor
-            DROP CONSTRAINT mozni_odgovor_id_vprasanja_fkey, 
-            ADD CONSTRAINT mozni_odgovor_id_vprasanja_fkey FOREIGN KEY (id_vprasanja)
-            REFERENCES vprasanje(id) ON DELETE CASCADE;
-            ampak ne dela ker nism owner????:( no ja problem za jutri ig-->
             <div class="col s12">
                 <h4>Obstoječa Vprašanja in Možni Odgovori</h4>
                 % for vprasanje in vprasanja_mozni_odgovori:
@@ -96,38 +90,27 @@
                             <li>{{ odgovor.mozni_odgovor }}</li>
                             % end
                         </ul>
-                        % if vprasanje.id >= 13:
-                        <form action="/izbrisi_vprasanje" method="post">
+                    </div>
+                    <div class="card-action">
+                        <form action="/izbrisi_vprasanje" method="post" style="display:inline;">
                             <input type="hidden" name="vprasanje_id" value="{{ vprasanje.id }}">
-                            <button class="btn red" type="submit">X</button>
+                            <button class="btn waves-effect waves-light red" type="submit">Izbriši
+                                <i class="material-icons right">delete</i>
+                            </button>
                         </form>
-                        % end
                     </div>
                 </div>
                 % end
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var elems = document.querySelectorAll('select');
             var instances = M.FormSelect.init(elems);
         });
-
-        function deleteVprasanje(id) {
-            fetch(`/izbrisi_vprasanje/${id}`, {
-                method: 'DELETE'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    // Reload the page or update the UI to reflect the deletion
-                    location.reload();
-                } else {
-                    alert(data.message);
-                }
-            });
-        }
     </script>
 </body>
 
