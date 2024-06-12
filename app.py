@@ -205,7 +205,7 @@ def izbrisi_vprasanje():
 @cookie_required
 def questions_get():
     vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
-    return template('vprasanja2.html', vprasanja=vprasanja)
+    return template('vprasanja.html', vprasanja=vprasanja)
 
 @post('/questions')
 @cookie_required

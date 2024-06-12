@@ -50,21 +50,29 @@
         <form action="/questions" method="POST">
             % for vprasanje in vprasanja:
                 <p>{{ vprasanje.vprasanje }}</p>
-                % for mozni_odgovor in vprasanje.mozni_odgovori:
-                    <p>
-                        <label>
-                            <input name="vprasanje_{{vprasanje.id}}" type="radio" value="{{mozni_odgovor.id}}" />
-                            <span>{{ mozni_odgovor.mozni_odgovor }}</span>
-                        </label>
-                    </p>
-                % end
+                <div class="input-field col s12">
+                    <select name="vprasanje_{{vprasanje.id}}">
+                        <option value="" disabled selected>Izberi odgovor</option>
+                        % for mozni_odgovor in vprasanje.mozni_odgovori:
+                            <option value="{{mozni_odgovor.id}}">{{ mozni_odgovor.mozni_odgovor }}</option>
+                        % end
+                    </select>
+                    <label>Izberi odgovor</label>
+                </div>
             % end
             <div class="button-container">
-                <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                <button class="btn waves-effect waves-light" type="submit" name="action">Nadaljuj
                     <i class="material-icons right">send</i>
                 </button>
             </div>
         </form>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+        });
+    </script>
 </body>
 </html>
