@@ -6,32 +6,148 @@
     <title>Moji podatki</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        .card-container {
+            margin-top: 20px;
+        }
+        .card-container .card {
+            margin-bottom: 20px;
+        }
+        /* Customize input field text color */
+        input[type="text"], input[type="password"] {
+            color: #424242 !important; /* Dark grey text color */
+        }
+        /* Customize label color for active state */
+        input[type="text"] ~ label, input[type="password"] ~ label {
+            color: #9e9e9e !important; /* Grey label color */
+        }
+        /* Customize card background and text color */
+        .custom-card {
+            background-color: #ffffff; /* White background */
+            color: #424242; /* Dark grey text color */
+        }
+        .custom-card .card-content {
+            padding: 24px; /* Increase padding for better spacing */
+        }
+        .custom-card .card-title {
+            color: #424242; /* Dark grey title color */
+        }
+        /* Button color */
+        .custom-btn {
+            background-color: #e57373; /* Light red */
+            color: #ffffff; /* White text */
+        }
+        .custom-btn:hover {
+            background-color: #f44336; /* Darker red on hover */
+        }
+        /* Customize "Ponovno izpolni vprašalnik" button */
+        .custom-secondary-btn {
+            background-color: #ffffff; /* White background */
+            color: #ef5350 ; /* Pink text */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        }
+        .custom-secondary-btn:hover {
+            background-color: #ef5350 ; /* Pink background on hover */
+            color: #ffffff; /* White text on hover */
+        }
+    </style>
 </head>
 <body>
     % rebase('osnova.html')
     <div class="container">
         <h1>Moj profil</h1>
-        <div class="row">
+        <div class="card-container">
+            <!-- Card 1: Podatki o profilu -->
             <div class="col s12 m6">
-                <div class="card blue-grey darken-1">
-                    <div class="card-content white-text">
+                <div class="card red lighten-3">
+                    <div class="card-content black-text">
+                        <span class="card-title">Podatki o profilu</span>
+                        <div class="divider"></div>
                         <p><strong>Uporabniško ime:</strong> {{ oseba.username }}</p>
-                        <p><strong>Ime:</strong> {{ oseba.ime }}</p>
-                        <p><strong>Priimek:</strong> {{ oseba.priimek }}</p>
                         <p><strong>Kontakt IG:</strong> {{ oseba.kontakt_ig }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Osebni podatki -->
+            <div class="col s12 m6">
+                <div class="card custom-card">
+                    <div class="card-content">
+                        <span class="card-title">Osebni podatki</span>
+                        <div class="divider"></div>
+                        <form action="/jaz" method="post" id="updateForm">
+                            <div class="input-field">
+                                <input id="ime" type="text" class="validate" name="ime" value="{{ oseba.ime }}">
+                                <label for="ime">Ime</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="priimek" type="text" class="validate" name="priimek" value="{{ oseba.priimek }}">
+                                <label for="priimek">Priimek</label>
+                            </div>
+                            <div class="input-field">
+                                <input id="geslo" type="password" class="validate" name="geslo">
+                                <label for="geslo">Novo geslo</label>
+                            </div>
+                            <button class="btn waves-effect waves-light custom-btn" type="submit" name="action">Posodobi</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Vprašanja in odgovori -->
+        <div class="card-container">
+            <div class="col s12 m12">
+                <div class="card red lighten-3">
+                    <div class="card-content black-text">
+                        <span class="card-title">Vprašanja in odgovori</span>
+                        <div class="divider"></div>
                         % for vprasanje, odgovor in oseba.odgovori.items():
                             <p><strong>{{ vprasanje }}</strong> {{ odgovor }}</p>
                         % end
                         <form action="/izbrisi_odgovore" method="post">
-                            <button class="btn waves-effect waves-light red" type="submit" name="action">Ponovno izpolni vprašalnik</button>
+                            <button class="btn waves-effect waves-light custom-secondary-btn" type="submit" name="action">Ponovno izpolni vprašalnik</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Initialize Materialize form elements
+            $('select').formSelect();
+
+            // Handle form submission with AJAX
+            $('#updateForm').submit(function(event){
+                event.preventDefault(); // Prevent default form submission
+
+                // Collect form data
+                var formData = {
+                    ime: $('#ime').val(),
+                    priimek: $('#priimek').val(),
+                    geslo: $('#geslo').val()
+                };
+
+                // Submit data via AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '/jaz',
+                    data: formData,
+                    success: function(response){
+                        // Optionally handle success response (e.g., display success message)
+                        M.toast({html: 'Podatki posodobljeni!', classes: 'rounded'});
+                    },
+                    error: function(error){
+                        // Optionally handle error response (e.g., display error message)
+                        M.toast({html: 'Napaka pri posodabljanju podatkov.', classes: 'rounded red'});
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-

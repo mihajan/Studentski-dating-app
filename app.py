@@ -274,13 +274,33 @@ def dislike():
 #prikaz samega sebi
 @get('/jaz')
 @cookie_required
-def jaz():
+def jaz_get():
     """
     Stran za prikaz osebnih podatkov uporabnika.
     """
     username = request.get_cookie("uporabnik")
     oseba = service.dobi_osebo(username)
     return template('jaz.html', oseba=oseba)
+
+@post('/jaz')
+@cookie_required
+def jaz_post():
+    """
+    Endpoint za posodobitev osebnih podatkov uporabnika.
+    """
+    username = request.get_cookie("uporabnik")
+    ime = request.forms.get('ime')
+    priimek = request.forms.get('priimek')
+    novo_geslo = request.forms.get('geslo')
+
+    if ime and priimek:
+        service.posodobi_ime_priimek(username, ime, priimek)
+
+    if novo_geslo:
+        service.posodobi_geslo(username, novo_geslo)
+
+    # Redirect back to GET /jaz to display updated data
+    redirect('/jaz')
 
 #spreminjanje odgovorov
 @post('/izbrisi_odgovore')
