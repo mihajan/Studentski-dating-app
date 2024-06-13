@@ -6,6 +6,18 @@
     <title>Domača Stran</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        .card-action {
+            display: flex;
+            justify-content: space-between;
+        }
+        .card-action form {
+            margin: 0;
+        }
+        .btn-flat {
+            padding: 0 0.5rem;
+        }
+    </style>
 </head>
 <body>
     % rebase('osnova.html')
@@ -20,24 +32,42 @@
             % for oseba in osebe:
                 % if not filter_text or any(filter_text.lower() in odgovor.lower() for vprasanje, odgovor in oseba.odgovori.items()):
                 <div class="col s12 m6">
-                    <div class="card blue-grey darken-1">
-                        <div class="card-content white-text">
-                            <p><strong>Username:</strong> {{ oseba.username }}</p>
-                            <p><strong>Ime:</strong> {{ oseba.ime }}</p>
+                    <div class="card 
+                        % for vprasanje, odgovor in oseba.odgovori.items():
+                            % if vprasanje == 'Katerega spola si?':
+                                % if odgovor == 'Moški':
+                                   teal lighten-3
+                                % elif odgovor == 'Ženska':
+                                    red lighten-3 
+                                % else:
+                                    green lighten-3
+                                % end
+                            % end
+                        % end 
+                        ">
+                        <div class="card-content black-text">
+                            <span class="card-title">{{ oseba.ime }}</span>
+                            <div class="divider"></div>
+                            <p><strong>Uporabniško ime:</strong> {{ oseba.username }}</p>
                             % for vprasanje, odgovor in oseba.odgovori.items():
-                            <p><strong>{{ vprasanje }}</strong> {{ odgovor }}</p>
+                            <p><strong>{{ vprasanje }}</strong> {{ odgovor }}.</p>
                             % end
                         </div>
+
                         <div class="card-action">
-                            <form action="/like" method="post" style="display:inline;">
+                            <form action="/like" method="post">
                                 <input type="hidden" name="username2" value="{{ oseba.username }}">
-                                <button type="submit" class="btn">Like</button>
+                                <button type="submit" class="btn btn-flat">
+                                    <i class="material-icons">thumb_up</i>
+                                </button>
                             </form>
-                            <form action="/dislike" method="post" style="display:inline;">
+                            <form action="/dislike" method="post">
                                 <input type="hidden" name="username2" value="{{ oseba.username }}">
-                                <button type="submit" class="btn">Dislike</button>
+                                <button type="submit" class="btn btn-flat">
+                                    <i class="material-icons">thumb_down</i>
+                                </button>
                             </form>
-                        </div>                        
+                        </div>                          
                     </div>
                 </div>
                 % end

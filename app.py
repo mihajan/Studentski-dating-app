@@ -227,8 +227,7 @@ def matchi():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_matche_osebe(username)
-    oseba = service.dobi_osebo(username)
-    return template('matchi.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
+    return template('matchi.html', osebe=osebe_dto, filter_text=filter_text)
 
 @get('/likes')
 @cookie_required
@@ -236,8 +235,7 @@ def likes():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_like_osebe(username)
-    oseba = service.dobi_osebo(username)
-    return template('likes.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
+    return template('likes.html', osebe=osebe_dto, filter_text=filter_text)
 
 @get('/dislikes')
 @cookie_required
@@ -245,8 +243,7 @@ def dislikes():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_dislike_osebe(username)
-    oseba = service.dobi_osebo(username)
-    return template('dislikes.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
+    return template('dislikes.html', osebe=osebe_dto, filter_text=filter_text)
 
 
 #dodajanje funkcionalnosti gumbom za like in dislike
