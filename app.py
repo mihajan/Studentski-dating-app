@@ -3,13 +3,20 @@ from Presentation.bottleext import route, get, post, run, request, template, red
 from Services.oseba_service import OsebaService
 from Services.auth_service import AuthService
 import os
+import socket
 
 # Ustvarimo instance servisov, ki jih potrebujemo.
 service = OsebaService()
 auth = AuthService()
 
+# Funkcija za iskanje prostih vrat
+def find_free_port():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(('', 0))
+        return s.getsockname()[1]
+
 # privzete nastavitve
-SERVER_PORT = os.environ.get('BOTTLE_PORT', 8080)
+SERVER_PORT = os.environ.get('BOTTLE_PORT', find_free_port())
 RELOADER = os.environ.get('BOTTLE_RELOADER', True)
 
 def cookie_required(f):
