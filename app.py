@@ -9,12 +9,6 @@ import os
 service = OsebaService()
 auth = AuthService()
 
-# Funkcija za iskanje prostih vrat
-#def find_free_port():
-#    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-#        s.bind(('', 0))
-#        return s.getsockname()[1]
-
 # privzete nastavitve
 SERVER_PORT = int(os.environ.get('BOTTLE_PORT', 8080))
 RELOADER = os.environ.get('BOTTLE_RELOADER', True)
@@ -119,7 +113,7 @@ def register_post():
         service.dodaj_osebo(username, ime, priimek, kontakt_ig)
         auth.dodaj_uporabnika(username, role, geslo)
         response.set_cookie("uporabnik", username)
-        redirect('/questions')
+        redirect(url('/questions'))
 
 
 @get('/izbira_role')
@@ -130,9 +124,9 @@ def izbira_role():
 def izbira_role_post():
     role = request.forms.get('role')
     if role == 'admin':
-        redirect('/admin_auth')
+        redirect(url('/admin_auth'))
     elif role == 'user':
-        redirect('/register')
+        redirect(url('/register'))
 
 #-------------------------------------------------------------------
 #prijava za admina
@@ -144,7 +138,7 @@ def admin_auth():
 def admin_auth_post():
     auth_code = request.forms.get('aktivacija')
     if auth_code == '123':  # zamenjajte z dejansko avtorizacijsko kodo
-        redirect('/admin_register')
+        redirect(url('/admin_register'))
     else:
         return template('admin_aktivacija.html', napaka = "Napačna avtorizacijska koda.")
 
@@ -158,7 +152,6 @@ def admin_register_post():
     geslo = request.forms.get('geslo').encode('iso-8859-1').decode('utf-8')
     role = 'admin'
     
-
     oseba = service.dobi_osebo(username)
 
     if oseba is not None:
@@ -167,7 +160,7 @@ def admin_register_post():
         service.dodaj_osebo(username, 'ime', 'priimek', 'kontakt_ig')
         auth.dodaj_uporabnika(username, role, geslo)
         response.set_cookie("uporabnik", username)
-        redirect('/urejanje')
+        redirect(url('/urejanje'))
 
 #-------------------------------------------------------------------
 #dodajanje vprašanj in možnih odgovorov (za admine)
@@ -190,7 +183,7 @@ def urejanje():
 def dodaj_vprasanje():
     vprasanje_text = request.forms.get('vprasanje').encode('iso-8859-1').decode('utf-8')
     service.dodaj_vprasanje(vprasanje_text)
-    redirect('/urejanje')
+    redirect(url('/urejanje'))
 
 @post('/dodaj_mozni_odgovor')
 @cookie_required
@@ -198,14 +191,14 @@ def dodaj_mozni_odgovor():
     vprasanje_id = request.forms.get('vprasanje_id')
     mozni_odgovor = request.forms.get('mozni_odgovor').encode('iso-8859-1').decode('utf-8')
     service.dodaj_mozni_odgovor(mozni_odgovor, int(vprasanje_id))
-    redirect('/urejanje')
+    redirect(url('/urejanje'))
 
 @post('/izbrisi_vprasanje')
 @cookie_required
 def izbrisi_vprasanje():
     vprasanje_id = request.forms.get('vprasanje_id')
     service.izbrisi_vprasanje(int(vprasanje_id))
-    redirect('/urejanje')
+    redirect(url('/urejanje'))
 
 #--------------------------------------------------------------------
 #stran za odgovarjanje na vprašanja
@@ -227,7 +220,7 @@ def questions_post():
     
     redirect(url('/'))
 
-#------------------------------------------------------------------------------------
+#-----------------------------------    -------------------------------------------------
 #prikaz templatov za matche, like in dislike
 @get('/matchi')
 @cookie_required
@@ -239,7 +232,7 @@ def matchi():
 
 @get('/likes')
 @cookie_required
-def likes():
+def likes_get():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_like_osebe(username)
@@ -247,7 +240,7 @@ def likes():
 
 @get('/dislikes')
 @cookie_required
-def dislikes():
+def dislikes_get():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_dislike_osebe(username)
@@ -255,17 +248,17 @@ def dislikes():
 
 
 #dodajanje funkcionalnosti gumbom za like in dislike
-@post('/like')
+@post('/likes')
 @cookie_required
-def like():
+def likes_post():
     username1 = request.get_cookie("uporabnik")
     username2 = request.forms.get('username2')
     service.spremeni_emotion(username1, username2, 'like')
     redirect(url('/'))
 
-@post('/dislike')
+@post('/dislikes')
 @cookie_required
-def dislike():
+def dislike_post():
     username1 = request.get_cookie("uporabnik")
     username2 = request.forms.get('username2')
     service.spremeni_emotion(username1, username2, 'dislike')
@@ -299,8 +292,7 @@ def jaz_post():
     if novo_geslo:
         service.posodobi_geslo(username, novo_geslo)
 
-    # Redirect back to GET /jaz to display updated data
-    redirect('/jaz')
+    redirect(url('/jaz'))
 
 #spreminjanje odgovorov
 @post('/izbrisi_odgovore')
@@ -323,7 +315,7 @@ def izbrisi_vprasanje():
     vprasanje_id = request.forms.get('vprasanje_id')
     if vprasanje_id:
         service.izbrisi_vprasanje_in_odgovore(int(vprasanje_id))
-    redirect('/urejanje')  
+    redirect(url('/urejanje'))  
 
 
-run(host="localhost", port=SERVER_PORT, reloader=True)
+run(host="localhost", port=SERVER_PORT, reloader=True, debug=True)

@@ -410,21 +410,6 @@ class Repo:
             self.conn.rollback()
             raise e
 
-    def posodobi_geslo(self, username: str, novo_geslo: str) -> None:
-        '''
-        Posodobi geslo uporabnika.
-        '''
-        try:
-            self.cur.execute("""
-                UPDATE Uporabnik 
-                SET password_hash = %s
-                WHERE username = %s
-            """, (novo_geslo, username))
-            self.conn.commit()
-        except Exception as e:
-            self.conn.rollback()
-            raise e
-
 
 
 #--------------------------------------

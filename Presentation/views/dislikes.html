@@ -1,6 +1,6 @@
    % rebase('osnova.html')
     <div class="container">
-        <form action="/dislikes" method="get">
+        <form action="{{url('/dislikes')}}" method="get">
             <div class="input-field col s12">
                 <input type="text" name="filter_text" placeholder="Išči osebe z željenim odgovorom" value="{{ filter_text }}">
                 <button class="btn waves-effect waves-light" type="submit" name="action">Išči</button>
@@ -10,16 +10,16 @@
             % for oseba in osebe:
                 % if not filter_text or any(filter_text.lower() in odgovor.lower() for vprasanje, odgovor in oseba.odgovori.items()):
                 <div class="col s12 m6">
-                    <div class="card blue-grey darken-1">
+                    <div class="card grey">
                         <div class="card-content white-text">
-                            <p><strong>Username:</strong> {{ oseba.username }}</p>
-                            <p><strong>Ime:</strong> {{ oseba.ime }}</p>
+                            <span class="card-title">{{ oseba.ime }}</span>
+                            <p><strong>Uporab ime:</strong> {{ oseba.username }}</p>
                             % for vprasanje, odgovor in oseba.odgovori.items():
-                            <p><strong>{{ vprasanje }}</strong> {{ odgovor }}</p>
+                            <p><strong>{{ vprasanje }}</strong> {{ odgovor }}.</p>
                             % end
                         </div>
                         <div class="card-action">
-                            <form action="/like" method="post" style="display:inline;">
+                            <form action="{{url('/likes')}}" method="post" style="display:inline;">
                                 <input type="hidden" name="username2" value="{{ oseba.username }}">
                                 <button type="submit" class="btn">Like</button>
                             </form>

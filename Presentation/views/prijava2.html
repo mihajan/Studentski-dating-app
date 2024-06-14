@@ -53,7 +53,7 @@
     <div class="container">
         <div class="form-container">
             <div class="row">
-                <form class="col s12" method="POST" action="/prijava">
+                <form class="col s12" method="POST" action="{{url('/prijava')}}">
                     % if napaka:
                             <div class="error-message">
                                 {{napaka}}
@@ -75,7 +75,7 @@
                         <button class="btn waves-effect waves-light" type="submit" name="action" value="login">
                             Prijava
                         </button>
-                        <a href="/izbira_role" class="btn waves-effect waves-light">
+                        <a href="{{url('/izbira_role')}}" class="btn waves-effect waves-light">
                             Registracija
                         </a>
                     </div>

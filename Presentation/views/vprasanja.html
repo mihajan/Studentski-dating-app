@@ -47,7 +47,7 @@
     </nav>
 
     <div class="form-container">
-        <form action="/questions" method="POST">
+        <form action="{{url('/questions')}}" method="POST">
             % for vprasanje in vprasanja:
                 <p>{{ vprasanje.vprasanje }}</p>
                 <div class="input-field col s12">

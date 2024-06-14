@@ -104,6 +104,3 @@ class OsebaService:
 
     def posodobi_ime_priimek(self, username: str, ime: str, priimek: str) -> None:
         self.repo.posodobi_ime_priimek(username, ime, priimek)
-
-    def posodobi_geslo(self, username: str, novo_geslo: str) -> None:
-        self.repo.posodobi_geslo(username, novo_geslo)
