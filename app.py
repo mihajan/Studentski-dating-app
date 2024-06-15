@@ -27,11 +27,6 @@ def cookie_required(f):
     return decorated
 
 
-# Določimo statične datoteke
-@route('/static/<filename:path>')
-def static(filename):
-    return static_file(filename, root='Presentation/static')
-
 def cookie_required(f):
     """
     Dekorator, ki zahteva veljaven piškotek. Če piškotka ni, uporabnika preusmeri na stran za prijavo.
@@ -43,20 +38,20 @@ def cookie_required(f):
         return template("prijava2.html", uporabnik=None, rola=None, napaka="Potrebna je prijava!")
     return decorated
 
-@get('/')
+@get('/', name='index')
 @cookie_required
 def index():
     username = request.get_cookie("uporabnik")
     role = request.get_cookie("rola")
 
     if role == 'admin':
-        redirect(url('/urejanje'))
+        redirect(url('urejanje'))
     else:
         filter_text = request.query.filter_text or ''
         osebe_dto = service.dobi_brezstika_osebe(username)
         oseba = service.dobi_osebo(username)
         return template('domaca_stran.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
-
+    
 
 @post('/prijava')
 def prijava():
@@ -76,9 +71,9 @@ def prijava():
         response.set_cookie("rola", prijava.role)
         
         if prijava.role == 'admin':
-            redirect(url('/urejanje'))
+            redirect(url('urejanje'))
         else:
-            redirect(url('/'))
+            redirect(url('index'))
         
     else:
         return template("prijava2.html", uporabnik=None, rola=None, napaka="Neuspešna prijava. Napačno geslo ali uporabniško ime.")
@@ -113,7 +108,7 @@ def register_post():
         service.dodaj_osebo(username, ime, priimek, kontakt_ig)
         auth.dodaj_uporabnika(username, role, geslo)
         response.set_cookie("uporabnik", username)
-        redirect(url('/questions'))
+        redirect(url('questions'))
 
 
 @get('/izbira_role')
@@ -124,9 +119,9 @@ def izbira_role():
 def izbira_role_post():
     role = request.forms.get('role')
     if role == 'admin':
-        redirect(url('/admin_auth'))
+        redirect(url('admin_auth'))
     elif role == 'user':
-        redirect(url('/register'))
+        redirect(url('register'))
 
 #-------------------------------------------------------------------
 #prijava za admina
@@ -138,7 +133,7 @@ def admin_auth():
 def admin_auth_post():
     auth_code = request.forms.get('aktivacija')
     if auth_code == '123':  # zamenjajte z dejansko avtorizacijsko kodo
-        redirect(url('/admin_register'))
+        redirect(url('admin_register'))
     else:
         return template('admin_aktivacija.html', napaka = "Napačna avtorizacijska koda.")
 
@@ -160,49 +155,49 @@ def admin_register_post():
         service.dodaj_osebo(username, 'ime', 'priimek', 'kontakt_ig')
         auth.dodaj_uporabnika(username, role, geslo)
         response.set_cookie("uporabnik", username)
-        redirect(url('/urejanje'))
+        redirect(url('urejanje'))
 
 #-------------------------------------------------------------------
 #dodajanje vprašanj in možnih odgovorov (za admine)
-@get('/urejanje')
+@get('/urejanje', name='urejanje')
 @cookie_required
 def urejanje():
     username = request.get_cookie("uporabnik")
     user = auth.dobi_uporabnika(username)
     
     if user.role != 'admin':
-        redirect(url('/'))
+        redirect(url('index'))
     
     vprasanja = service.dobi_vsa_vprasanja()
     vprasanja_mozni_odgovori = service.dobi_vsa_vprasanja_in_mozne_odgovore()
     return template('urejanje2.html', vprasanja=vprasanja, vprasanja_mozni_odgovori=vprasanja_mozni_odgovori)
 
 
-@post('/dodaj_vprasanje')
+@post('/dodaj_vprasanje', name='dodaj_vprasanje')
 @cookie_required
 def dodaj_vprasanje():
     vprasanje_text = request.forms.get('vprasanje').encode('iso-8859-1').decode('utf-8')
     service.dodaj_vprasanje(vprasanje_text)
-    redirect(url('/urejanje'))
+    redirect(url('urejanje'))
 
-@post('/dodaj_mozni_odgovor')
+@post('/dodaj_mozni_odgovor', name='dodaj_mozni_odgovor')
 @cookie_required
 def dodaj_mozni_odgovor():
     vprasanje_id = request.forms.get('vprasanje_id')
     mozni_odgovor = request.forms.get('mozni_odgovor').encode('iso-8859-1').decode('utf-8')
     service.dodaj_mozni_odgovor(mozni_odgovor, int(vprasanje_id))
-    redirect(url('/urejanje'))
+    redirect(url('urejanje'))
 
-@post('/izbrisi_vprasanje')
+@post('/izbrisi_vprasanje', name='izbrisi_vprasanje')
 @cookie_required
 def izbrisi_vprasanje():
     vprasanje_id = request.forms.get('vprasanje_id')
     service.izbrisi_vprasanje(int(vprasanje_id))
-    redirect(url('/urejanje'))
+    redirect(url('urejanje'))
 
 #--------------------------------------------------------------------
 #stran za odgovarjanje na vprašanja
-@get('/questions')
+@get('/questions', name='questions')
 @cookie_required
 def questions_get():
     vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
@@ -217,12 +212,11 @@ def questions_post():
         odgovor = request.forms.get(f'vprasanje_{vprasanje.id}')
         if odgovor:
             service.dodaj_odgovor_uporabnika(username, int(odgovor))
-    
-    redirect(url('/'))
+    redirect(url('index'))
 
 #-----------------------------------    -------------------------------------------------
 #prikaz templatov za matche, like in dislike
-@get('/matchi')
+@get('/matchi', name='matchi')
 @cookie_required
 def matchi():
     username = request.get_cookie("uporabnik")
@@ -230,17 +224,17 @@ def matchi():
     osebe_dto = service.dobi_matche_osebe(username)
     return template('matchi.html', osebe=osebe_dto, filter_text=filter_text)
 
-@get('/likes')
+@get('/likes', name='likes')
 @cookie_required
-def likes_get():
+def likes():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_like_osebe(username)
     return template('likes.html', osebe=osebe_dto, filter_text=filter_text)
 
-@get('/dislikes')
+@get('/dislikes', name='dislikes')
 @cookie_required
-def dislikes_get():
+def dislikes():
     username = request.get_cookie("uporabnik")
     filter_text = request.query.filter_text or ''
     osebe_dto = service.dobi_dislike_osebe(username)
@@ -254,7 +248,7 @@ def likes_post():
     username1 = request.get_cookie("uporabnik")
     username2 = request.forms.get('username2')
     service.spremeni_emotion(username1, username2, 'like')
-    redirect(url('/'))
+    redirect(url('index'))
 
 @post('/dislikes')
 @cookie_required
@@ -262,12 +256,12 @@ def dislike_post():
     username1 = request.get_cookie("uporabnik")
     username2 = request.forms.get('username2')
     service.spremeni_emotion(username1, username2, 'dislike')
-    redirect(url('/'))
+    redirect(url('index'))
 
 #prikaz samega sebi
-@get('/jaz')
+@get('/jaz', name='jaz')
 @cookie_required
-def jaz_get():
+def jaz():
     """
     Stran za prikaz osebnih podatkov uporabnika.
     """
@@ -282,8 +276,8 @@ def jaz_post():
     Endpoint za posodobitev osebnih podatkov uporabnika.
     """
     username = request.get_cookie("uporabnik")
-    ime = request.forms.get('ime')
-    priimek = request.forms.get('priimek')
+    ime = request.forms.get('ime').encode('iso-8859-1').decode('utf-8')
+    priimek = request.forms.get('priimek').encode('iso-8859-1').decode('utf-8')
     novo_geslo = request.forms.get('geslo')
 
     if ime and priimek:
@@ -292,10 +286,10 @@ def jaz_post():
     if novo_geslo:
         service.posodobi_geslo(username, novo_geslo)
 
-    redirect(url('/jaz'))
+    redirect(url('jaz'))
 
 #spreminjanje odgovorov
-@post('/izbrisi_odgovore')
+@post('/izbrisi_odgovore', name='izbrisi_odgovore')
 @cookie_required
 def izbrisi_odgovore():
     """
@@ -303,7 +297,7 @@ def izbrisi_odgovore():
     """
     username = request.get_cookie("uporabnik")
     service.izbrisi_odgovore_uporabnika(username)
-    redirect(url('/questions'))
+    redirect(url('questions'))
 
 
 @post('/izbrisi_vprasanje')
@@ -315,7 +309,7 @@ def izbrisi_vprasanje():
     vprasanje_id = request.forms.get('vprasanje_id')
     if vprasanje_id:
         service.izbrisi_vprasanje_in_odgovore(int(vprasanje_id))
-    redirect(url('/urejanje'))  
+    redirect(url('urejanje'))  
 
 
 run(host="localhost", port=SERVER_PORT, reloader=True, debug=True)

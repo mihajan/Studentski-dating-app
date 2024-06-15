@@ -22,7 +22,7 @@
 <body>
     % rebase('osnova.html')
     <div class="container">
-        <form action="{{url('/')}}" method="get">
+        <form action="{{url('index')}}" method="get">
             <div class="input-field col s12">
                 <input type="text" name="filter_text" placeholder="Išči osebe z željenim odgovorom" value="{{ filter_text }}">
                 <button class="btn waves-effect waves-light" type="submit" name="action">Išči</button>
@@ -55,13 +55,13 @@
                         </div>
 
                         <div class="card-action">
-                            <form action="{{url('/likes')}}" method="post">
+                            <form action="{{url('likes')}}" method="post">
                                 <input type="hidden" name="username2" value="{{ oseba.username }}">
                                 <button type="submit" class="btn btn-flat">
                                     <i class="material-icons">thumb_up</i>
                                 </button>
                             </form>
-                            <form action="{{url('/dislikes')}}" method="post">
+                            <form action="{{url('dislikes')}}" method="post">
                                 <input type="hidden" name="username2" value="{{ oseba.username }}">
                                 <button type="submit" class="btn btn-flat">
                                     <i class="material-icons">thumb_down</i>

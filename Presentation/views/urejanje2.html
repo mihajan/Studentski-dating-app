@@ -7,7 +7,7 @@
     <title>Urejanje</title>
     <style>
         body {
-            background-image: url('/static/Images/prazno.jpg');
+            background-image: url('static/Images/prazno.jpg');
             background-size: cover;
         }
 
@@ -36,7 +36,7 @@
         <div class="nav-wrapper">
             <a class="brand-logo center">Urejanje</a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="{{url('/odjava')}}"><i class="material-icons">logout</i></a></li>
+                <li><a href="{{url('odjava')}}"><i class="material-icons">logout</i></a></li>
             </ul>
         </div>
     </nav>
@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col s12">
                 <h4>Dodaj vprašanje</h4>
-                <form action="{{url('/dodaj_vprasanje')}}" method="post">
+                <form action="{{url('dodaj_vprasanje')}}" method="post">
                     <div class="input-field">
                         <input type="text" id="vprasanje" name="vprasanje" required>
                         <label for="vprasanje">Novo vprašanje</label>
@@ -58,7 +58,7 @@
         <div class="row">
             <div class="col s12">
                 <h4>Dodaj možni odgovor</h4>
-                <form action="{{url(dodaj_mozni_odgovor)}}" method="post">
+                <form action="{{url('dodaj_mozni_odgovor')}}" method="post">
                     <div class="input-field">
                         <select id="vprasanje_id" name="vprasanje_id" required>
                             <option value="" disabled selected>Izberite vprašanje</option>
@@ -93,7 +93,7 @@
                     </div>
                     <div class="card-action">
                         % if vprasanje.id > 12:
-                        <form action="{{url('/izbrisi_vprasanje')}}" method="post" style="display:inline;">
+                        <form action="{{url('izbrisi_vprasanje')}}" method="post" style="display:inline;">
                             <input type="hidden" name="vprasanje_id" value="{{ vprasanje.id }}">
                             <button class="btn waves-effect waves-light red" type="submit">Izbriši
                                 <i class="material-icons right">delete</i>
