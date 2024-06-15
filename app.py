@@ -1,5 +1,5 @@
 from functools import wraps
-from Presentation.bottleext import route, get, post, run, request, template, redirect, static_file, url, response
+from Presentation.bottleext import *
 from Services.oseba_service import OsebaService
 from Services.auth_service import AuthService
 import os
@@ -26,39 +26,26 @@ def cookie_required(f):
         return template("prijava2.html", uporabnik=None, rola=None, napaka="Potrebna je prijava!")
     return decorated
 
-
 # Določimo statične datoteke
-@route('/static/<filename:path>')
+@route('/static/<filename:path>', name='static')
 def static(filename):
     return static_file(filename, root='Presentation/static')
 
-def cookie_required(f):
-    """
-    Dekorator, ki zahteva veljaven piškotek. Če piškotka ni, uporabnika preusmeri na stran za prijavo.
-    """
-    def decorated(*args, **kwargs):
-        cookie = request.get_cookie("uporabnik")
-        if cookie:
-            return f(*args, **kwargs)
-        return template("prijava2.html", uporabnik=None, rola=None, napaka="Potrebna je prijava!")
-    return decorated
-
-@get('/')
+@get('/', name='index')
 @cookie_required
 def index():
     username = request.get_cookie("uporabnik")
     role = request.get_cookie("rola")
 
     if role == 'admin':
-        redirect(url('/urejanje'))
+        redirect(url('urejanje'))
     else:
         filter_text = request.query.filter_text or ''
         osebe_dto = service.dobi_brezstika_osebe(username)
         oseba = service.dobi_osebo(username)
-        return template('domaca_stran.html', oseba = oseba, osebe=osebe_dto, filter_text=filter_text)
+        return template('domaca_stran.html', oseba=oseba, osebe=osebe_dto, filter_text=filter_text)
 
-
-@post('/prijava')
+@post('/prijava', name='prijava')
 def prijava():
     """
     Prijavi uporabnika v aplikacijo. Če je prijava uspešna, ustvari piškotke o uporabniku in njegovi roli.
@@ -76,14 +63,14 @@ def prijava():
         response.set_cookie("rola", prijava.role)
         
         if prijava.role == 'admin':
-            redirect(url('/urejanje'))
+            redirect(url('urejanje'))
         else:
-            redirect(url('/'))
+            redirect(url('index'))
         
     else:
         return template("prijava2.html", uporabnik=None, rola=None, napaka="Neuspešna prijava. Napačno geslo ali uporabniško ime.")
 
-@get('/odjava')
+@get('/odjava', name='odjava')
 def odjava():
     """
     Odjavi uporabnika iz aplikacije. Pobriše piškotke o uporabniku in njegovi roli.
@@ -92,11 +79,11 @@ def odjava():
     response.delete_cookie("rola")
     return template('prijava2.html', uporabnik=None, rola=None, napaka=None)
 
-@get('/register')
+@get('/register', name='register')
 def register():
     return template('registracija.html', napaka = None)
 
-@post('/register')
+@post('/register', name='register_post')
 def register_post():
     username = request.forms.get('username').encode('iso-8859-1').decode('utf-8')
     ime = request.forms.get('ime').encode('iso-8859-1').decode('utf-8')
@@ -113,40 +100,37 @@ def register_post():
         service.dodaj_osebo(username, ime, priimek, kontakt_ig)
         auth.dodaj_uporabnika(username, role, geslo)
         response.set_cookie("uporabnik", username)
-        redirect(url('/questions'))
+        redirect(url('questions_get'))
 
-
-@get('/izbira_role')
+@get('/izbira_role', name='izbira_role')
 def izbira_role():
     return template('izbira_role.html')
 
-@post('/izbira_role')
+@post('/izbira_role', name='izbira_role_post')
 def izbira_role_post():
     role = request.forms.get('role')
     if role == 'admin':
-        redirect(url('/admin_auth'))
+        redirect(url('admin_auth'))
     elif role == 'user':
-        redirect(url('/register'))
+        redirect(url('register'))
 
-#-------------------------------------------------------------------
-#prijava za admina
-@get('/admin_auth')
+@get('/admin_auth', name='admin_auth')
 def admin_auth():
     return template('admin_aktivacija.html', napaka = None)
 
-@post('/admin_auth')
+@post('/admin_auth', name='admin_auth_post')
 def admin_auth_post():
     auth_code = request.forms.get('aktivacija')
     if auth_code == '123':  # zamenjajte z dejansko avtorizacijsko kodo
-        redirect(url('/admin_register'))
+        redirect(url('admin_register'))
     else:
         return template('admin_aktivacija.html', napaka = "Napačna avtorizacijska koda.")
 
-@get('/admin_register')
+@get('/admin_register', name='admin_register')
 def admin_register():
     return template('admin_register.html', napaka = None)
 
-@post('/admin_register')
+@post('/admin_register', name='admin_register_post')
 def admin_register_post():
     username = request.forms.get('username').encode('iso-8859-1').decode('utf-8')
     geslo = request.forms.get('geslo').encode('iso-8859-1').decode('utf-8')
@@ -160,55 +144,50 @@ def admin_register_post():
         service.dodaj_osebo(username, 'ime', 'priimek', 'kontakt_ig')
         auth.dodaj_uporabnika(username, role, geslo)
         response.set_cookie("uporabnik", username)
-        redirect(url('/urejanje'))
+        redirect(url('urejanje'))
 
-#-------------------------------------------------------------------
-#dodajanje vprašanj in možnih odgovorov (za admine)
-@get('/urejanje')
+@get('/urejanje', name='urejanje')
 @cookie_required
 def urejanje():
     username = request.get_cookie("uporabnik")
     user = auth.dobi_uporabnika(username)
     
     if user.role != 'admin':
-        redirect(url('/'))
+        redirect(url('index'))
     
     vprasanja = service.dobi_vsa_vprasanja()
     vprasanja_mozni_odgovori = service.dobi_vsa_vprasanja_in_mozne_odgovore()
     return template('urejanje2.html', vprasanja=vprasanja, vprasanja_mozni_odgovori=vprasanja_mozni_odgovori)
 
-
-@post('/dodaj_vprasanje')
+@post('/dodaj_vprasanje', name='dodaj_vprasanje')
 @cookie_required
 def dodaj_vprasanje():
     vprasanje_text = request.forms.get('vprasanje').encode('iso-8859-1').decode('utf-8')
     service.dodaj_vprasanje(vprasanje_text)
-    redirect(url('/urejanje'))
+    redirect(url('urejanje'))
 
-@post('/dodaj_mozni_odgovor')
+@post('/dodaj_mozni_odgovor', name='dodaj_mozni_odgovor')
 @cookie_required
 def dodaj_mozni_odgovor():
     vprasanje_id = request.forms.get('vprasanje_id')
     mozni_odgovor = request.forms.get('mozni_odgovor').encode('iso-8859-1').decode('utf-8')
     service.dodaj_mozni_odgovor(mozni_odgovor, int(vprasanje_id))
-    redirect(url('/urejanje'))
+    redirect(url('urejanje'))
 
-@post('/izbrisi_vprasanje')
+@post('/izbrisi_vprasanje', name='izbrisi_vprasanje')
 @cookie_required
 def izbrisi_vprasanje():
     vprasanje_id = request.forms.get('vprasanje_id')
     service.izbrisi_vprasanje(int(vprasanje_id))
-    redirect(url('/urejanje'))
+    redirect(url('urejanje'))
 
-#--------------------------------------------------------------------
-#stran za odgovarjanje na vprašanja
-@get('/questions')
+@get('/questions', name='questions_get')
 @cookie_required
 def questions_get():
     vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
     return template('vprasanja.html', vprasanja=vprasanja)
 
-@post('/questions')
+@post('/questions', name='questions_post')
 @cookie_required
 def questions_post():
     username = request.get_cookie("uporabnik")
@@ -218,11 +197,9 @@ def questions_post():
         if odgovor:
             service.dodaj_odgovor_uporabnika(username, int(odgovor))
     
-    redirect(url('/'))
+    redirect(url('index'))
 
-#-----------------------------------    -------------------------------------------------
-#prikaz templatov za matche, like in dislike
-@get('/matchi')
+@get('/matchi', name='matchi')
 @cookie_required
 def matchi():
     username = request.get_cookie("uporabnik")
@@ -230,7 +207,7 @@ def matchi():
     osebe_dto = service.dobi_matche_osebe(username)
     return template('matchi.html', osebe=osebe_dto, filter_text=filter_text)
 
-@get('/likes')
+@get('/likes', name='likes_get')
 @cookie_required
 def likes_get():
     username = request.get_cookie("uporabnik")
@@ -238,7 +215,7 @@ def likes_get():
     osebe_dto = service.dobi_like_osebe(username)
     return template('likes.html', osebe=osebe_dto, filter_text=filter_text)
 
-@get('/dislikes')
+@get('/dislikes', name='dislikes_get')
 @cookie_required
 def dislikes_get():
     username = request.get_cookie("uporabnik")
@@ -246,26 +223,23 @@ def dislikes_get():
     osebe_dto = service.dobi_dislike_osebe(username)
     return template('dislikes.html', osebe=osebe_dto, filter_text=filter_text)
 
-
-#dodajanje funkcionalnosti gumbom za like in dislike
-@post('/likes')
+@post('/likes', name='likes_post')
 @cookie_required
 def likes_post():
     username1 = request.get_cookie("uporabnik")
     username2 = request.forms.get('username2')
     service.spremeni_emotion(username1, username2, 'like')
-    redirect(url('/'))
+    redirect(url('index'))
 
-@post('/dislikes')
+@post('/dislikes', name='dislike_post')
 @cookie_required
 def dislike_post():
     username1 = request.get_cookie("uporabnik")
     username2 = request.forms.get('username2')
     service.spremeni_emotion(username1, username2, 'dislike')
-    redirect(url('/'))
+    redirect(url('index'))
 
-#prikaz samega sebi
-@get('/jaz')
+@get('/jaz', name='jaz_get')
 @cookie_required
 def jaz_get():
     """
@@ -275,7 +249,7 @@ def jaz_get():
     oseba = service.dobi_osebo(username)
     return template('jaz.html', oseba=oseba)
 
-@post('/jaz')
+@post('/jaz', name='jaz_post')
 @cookie_required
 def jaz_post():
     """
@@ -292,10 +266,9 @@ def jaz_post():
     if novo_geslo:
         service.posodobi_geslo(username, novo_geslo)
 
-    redirect(url('/jaz'))
+    redirect(url('jaz_get'))
 
-#spreminjanje odgovorov
-@post('/izbrisi_odgovore')
+@post('/izbrisi_odgovore', name='izbrisi_odgovore')
 @cookie_required
 def izbrisi_odgovore():
     """
@@ -303,10 +276,9 @@ def izbrisi_odgovore():
     """
     username = request.get_cookie("uporabnik")
     service.izbrisi_odgovore_uporabnika(username)
-    redirect(url('/questions'))
+    redirect(url('questions_get'))
 
-
-@post('/izbrisi_vprasanje')
+@post('/izbrisi_vprasanje', name='izbrisi_vprasanje')
 @cookie_required
 def izbrisi_vprasanje():
     """
@@ -315,7 +287,6 @@ def izbrisi_vprasanje():
     vprasanje_id = request.forms.get('vprasanje_id')
     if vprasanje_id:
         service.izbrisi_vprasanje_in_odgovore(int(vprasanje_id))
-    redirect(url('/urejanje'))  
+    redirect(url('urejanje'))  
 
-
-run(host="localhost", port=SERVER_PORT, reloader=True, debug=True)
+run(host="localhost", port=SERVER_PORT, reloader=RELOADER, debug=True)

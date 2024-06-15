@@ -70,7 +70,7 @@
                     <div class="card-content">
                         <span class="card-title">Sprememba osebnih podatkov</span>
                         <div class="divider"></div>
-                        <form action="{{ url('/jaz') }}" method="post" id="updateForm">
+                        <form action="{{ url('jaz_post') }}" method="post" id="updateForm">
                             <div class="input-field">
                                 <input id="ime" type="text" class="validate" name="ime" value="{{ oseba.ime }}">
                                 <label for="ime">Ime</label>
@@ -101,7 +101,7 @@
                             </div>
                             <div class="divider"></div>
                         % end
-                        <form action="{{ url('/izbrisi_odgovore') }}" method="post">
+                        <form action="{{ url('izbrisi_odgovore') }}" method="post">
                             <div style="margin-top: 20px;">
                                 <button class="btn waves-effect waves-light custom-secondary-btn" type="submit" name="action">Ponovno izpolni vprašalnik</button>
                             </div>
