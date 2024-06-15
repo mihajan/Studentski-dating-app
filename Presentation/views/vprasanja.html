@@ -49,6 +49,7 @@
     <div class="form-container">
         <form action="{{url('/questions')}}" method="POST">
             % for vprasanje in vprasanja:
+                <div style="padding-bottom: 20px;">
                 <p>{{ vprasanje.vprasanje }}</p>
                 <div class="input-field col s12">
                     <select name="vprasanje_{{vprasanje.id}}">
@@ -57,7 +58,8 @@
                             <option value="{{mozni_odgovor.id}}">{{ mozni_odgovor.mozni_odgovor }}</option>
                         % end
                     </select>
-                    <label>Izberi odgovor</label>
+                   <!-- <label>Izberi odgovor</label> -->
+                </div>
                 </div>
             % end
             <div class="button-container">
