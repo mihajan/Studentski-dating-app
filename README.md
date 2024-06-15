@@ -7,8 +7,8 @@ Ideja najinega projekta je izdelati spletno aplikacijo, ki bo v nekaterih pogled
 
 Omogočen je tudi dostop za admina, ki po uspešni avtorizaciji lahko dodaja nova vprašanja in možne odgovre na njih. Admin ne sodeluje v procesu iskanja matchov.
 
-Aplikacijo lahko poženete tudi v Binder in sicer na povezavi
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mihajan/Studentski-dating-app/main?labpath=proxy%2F8080)
+Aplikacijo lahko poženete tudi v Binder in sicer na povezavi (NOV LINK ZA PROBO)
+[![Binder](https://mybinder.org/badge_logo.svg)]([https://mybinder.org/v2/gh/mihajan/Studentski-dating-app/proba?labpath=proxy%2F8080])
 
 
 ### ER diagram
