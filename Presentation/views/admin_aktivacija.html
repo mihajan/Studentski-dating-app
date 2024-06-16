@@ -47,7 +47,7 @@
     </nav>
     <div class="container">
         <div class="row">
-            <form id="activation-form" action="/admin_auth" method="post">
+            <form id="activation-form" action="{{url('admin_auth_post')}}" method="post">
                 <div class="row">
                     % if napaka:
                                 <div class="error-message">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="row center-align-button">
-                    <a href="/izbira_role" class="btn waves-effect waves-light"><i class="material-icons left">arrow_back</i>Nazaj</a>
+                    <a href="{{url('izbira_role')}}" class="btn waves-effect waves-light"><i class="material-icons left">arrow_back</i>Nazaj</a>
                     <button class="btn waves-effect waves-light" type="submit" name="action">Nadaljuj
                         <i class="material-icons right">send</i>
                     </button>

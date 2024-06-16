@@ -1,6 +1,6 @@
 % rebase('osnova.html')
 <div class="container">
-    <form action="/matchi" method="get">
+    <form action="{{url('matchi')}}" method="get">
         <div class="input-field col s12">
             <input type="text" name="filter_text" placeholder="Išči osebe z željenim odgovorom" value="{{ filter_text }}">
             <button class="btn waves-effect waves-light" type="submit" name="action">Išči</button>
@@ -10,18 +10,24 @@
         % for oseba in osebe:
             % if not filter_text or any(filter_text.lower() in odgovor.lower() for vprasanje, odgovor in oseba.odgovori.items()):
             <div class="col s12 m6">
-                <div class="card blue-grey darken-1">
+                <div class="card red darken-4">
                     <div class="card-content white-text">
-                        <p><strong>Username:</strong> {{ oseba.username }}</p>
-                        <p><strong>Ime:</strong> {{ oseba.ime }}</p>
-                        <p><strong>Priimek:</strong> {{ oseba.priimek }}</p>
-                        <p><strong>Instagram:</strong> {{ oseba.kontakt_ig }}</p>
+                        <span class="card-title">{{ oseba.ime }} {{ oseba.priimek }}</span>
+                        <p><strong style="font-weight: bold;" >Instagram:</strong> {{ oseba.kontakt_ig }}</p>
+
+                        <p><strong>Uporabniško ime:</strong> {{ oseba.username }}</p>
                         % for vprasanje, odgovor in oseba.odgovori.items():
-                        <p><strong>{{ vprasanje }}</strong> {{ odgovor }}</p>
+                                <div class="question-answer">
+                                    <ul style="list-style-type: none; padding-left: 0;">
+                                        <li style="font-weight: bold;">{{ vprasanje }}</li>
+                                    </ul>
+                                    <p style="text-align: center;">{{ odgovor }}</p>
+                                </div>
+                                <div class="divider"></div>
                         % end
                     </div>
                     <div class="card-action">
-                        <form action="/dislike" method="post" style="display:inline;">
+                        <form action="{{url('dislike_post')}}" method="post" style="display:inline;">
                             <input type="hidden" name="username2" value="{{ oseba.username }}">
                             <button type="submit" class="btn">Dislike</button>
                         </form>

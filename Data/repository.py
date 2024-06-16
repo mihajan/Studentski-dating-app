@@ -395,6 +395,21 @@ class Repo:
             """, (uporabnik.last_login,uporabnik.username))
         self.conn.commit()
 
+    def posodobi_ime_priimek(self, username: str, ime: str, priimek: str) -> None:
+        '''
+        Posodobi ime in priimek osebe.
+        '''
+        try:
+            self.cur.execute("""
+                UPDATE Oseba 
+                SET ime = %s, priimek = %s
+                WHERE username = %s
+            """, (ime, priimek, username))
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+
 
 
 #--------------------------------------

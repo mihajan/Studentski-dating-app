@@ -5,12 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Študentski dating app</title>
-    <style>
-        body {
-            background-image: url('/static/Images/prazno.jpg');
-            background-size: cover; /* This ensures the image covers the whole background */
-        }
-    </style>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -26,21 +20,21 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-            <a href="/" class="brand-logo center"><i class="material-icons">home</i></a>
+            <a href="{{url('index')}}" class="brand-logo center"><i class="material-icons">home</i></a>
             <ul id="nav-mobile" class="left hide-on-med-and-down">
-                <li><a href="/jaz" class="brand-logo"><i class="material-icons left">person</i>Profil</a></li>
+                <li><a href="{{url('jaz_get')}}" class="brand-logo"><i class="material-icons left">person</i>Profil</a></li>
             </ul>
             <ul class="right hide-on-med-and-down">
-                <li><a href="/odjava"><i class="large material-icons">logout</i></a></li>
+                <li><a href="{{url('odjava')}}"><i class="large material-icons">logout</i></a></li>
             </ul>
         </div>
     </nav>
 
     <ul id="slide-out" class="sidenav">
-        <li><a class="waves-effect" href="/likes"><i class="material-icons">thumb_up_off_alt</i>Likes</a></li>
-        <li><a class="waves-effect" href="/dislikes"><i class="material-icons">thumb_down_off_alt</i>Dislikes</a></li>
+        <li><a class="waves-effect" href="{{url('likes_get')}}"><i class="material-icons">thumb_up_off_alt</i>Likes</a></li>
+        <li><a class="waves-effect" href="{{url('dislikes_get')}}"><i class="material-icons">thumb_down_off_alt</i>Dislikes</a></li>
         <li><div class="divider"></div></li>
-        <li><a class="waves-effect" href="/matchi"><i class="material-icons">favorite_border</i>Matches</a></li>
+        <li><a class="waves-effect" href="{{url('matchi')}}"><i class="material-icons">favorite_border</i>Matches</a></li>
     </ul>
     <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         
