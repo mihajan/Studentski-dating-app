@@ -2,3 +2,4 @@ psycopg2-binary
 dataclasses-json
 bottle
 bcrypt
+jupyter-server-proxy
