@@ -22,7 +22,7 @@ def cookie_required(f):
         cookie = request.get_cookie("uporabnik")
         if cookie:
             return f(*args, **kwargs)
-        return template("prijava2.html", uporabnik=None, rola=None, napaka="Potrebna je prijava!")
+        return template("prijava.html", uporabnik=None, rola=None, napaka="Potrebna je prijava!")
     return decorated
 
 @get('/')
@@ -53,7 +53,7 @@ def prijava():
     password = request.forms.get('password')
 
     if not auth.obstaja_uporabnik(username):
-        return template("prijava2.html", napaka="Uporabnik s tem imenom ne obstaja")
+        return template("prijava.html", napaka="Uporabnik s tem imenom ne obstaja")
 
     prijava = auth.prijavi_uporabnika(username, password)
     if prijava:
@@ -66,7 +66,7 @@ def prijava():
             redirect(url('index'))
         
     else:
-        return template("prijava2.html", uporabnik=None, rola=None, napaka="Neuspešna prijava. Napačno geslo ali uporabniško ime.")
+        return template("prijava.html", uporabnik=None, rola=None, napaka="Neuspešna prijava. Napačno geslo ali uporabniško ime.")
 
 @get('/odjava')
 def odjava():
@@ -75,7 +75,7 @@ def odjava():
     """
     response.delete_cookie("uporabnik")
     response.delete_cookie("rola")
-    return template('prijava2.html', uporabnik=None, rola=None, napaka=None)
+    return template('prijava.html', uporabnik=None, rola=None, napaka=None)
 
 
 #--------------------------------------
