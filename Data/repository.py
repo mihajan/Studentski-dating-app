@@ -16,7 +16,8 @@ class Repo:
         self.conn = psycopg2.connect(database=auth.db, host=auth.host, user=auth.user, password=auth.password, port=DB_PORT)
         self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
- 
+
+#--------------------------------------
 #metode za pridobivanje oseb za različne uporabnike glede na njihov status
     def dobi_osebo(self, username: str) -> Oseba:
         '''
@@ -112,7 +113,8 @@ class Repo:
 
         return oseba_dto
     
-#-----------------------------------------------------------------------------------------------------    
+    
+#--------------------------------------
 #metode za vprašanja in odgovore
     def dodaj_vprasanje(self, vprasanje: Vprasanje):
         '''
@@ -187,7 +189,8 @@ class Repo:
         """, (odgovor.id_moznega_odgovora, odgovor.username))
         self.conn.commit()
 
-#-----------------------------------------------------------------------------------------------------
+
+#--------------------------------------
 #Metode, ki se nanašajo na emotione 
     def spremeni_emotion(self, oseba1: Oseba, oseba2: Oseba, vrednost: str) -> None:
         '''
@@ -290,7 +293,8 @@ class Repo:
         usernames = [row['username'] for row in results if row['username'] not in admin_usernames]
         return usernames
 
-#-------------------------------------------------------------------------------------------------------
+
+#--------------------------------------
 #metode, ki jih bova dejansko klicala (vrnejo vse osebe za določen seznam za našga userja)
     def dobi_like_osebeDTO(self, username: str) -> List[OsebaDTO]:
         '''
@@ -349,7 +353,8 @@ class Repo:
                 oseba_dto_list.append(oseba_dto)
         return oseba_dto_list
 
-#-------------------------------------------------------------------------------------------------------
+
+#--------------------------------------
 #Metode za upravljanje uporabnikov
     def dodaj_osebo(self, oseba: Oseba):
         '''Dodamo osebo; še prej preverimo če tak username še ne obstaja'''
@@ -409,7 +414,6 @@ class Repo:
         except Exception as e:
             self.conn.rollback()
             raise e
-
 
 
 #--------------------------------------
