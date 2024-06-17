@@ -41,6 +41,29 @@
             text-align: center;
             margin-top: 10px;
         }
+
+        .card-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .custom-secondary-btn {
+            background-color: #ffffff;
+            color: #ef5350;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .custom-secondary-btn:hover {
+            background-color: #ef5350;
+            color: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -55,9 +78,9 @@
             <div class="row">
                 <form class="col s12" method="POST" action="{{url('prijava')}}">
                     % if napaka:
-                            <div class="error-message">
-                                {{napaka}}
-                            </div>
+                        <div class="error-message">
+                            {{napaka}}
+                        </div>
                     % end
                     <div class="row">
                         <div class="input-field col s12">
@@ -75,11 +98,20 @@
                         <button class="btn waves-effect waves-light" type="submit" name="action" value="login">
                             Prijava
                         </button>
-                        <a href="{{url('izbira_role')}}" class="btn waves-effect waves-light">
-                            Registracija
-                        </a>
                     </div>
                 </form>
+            </div>
+            <div class="col s12">
+                <div class="card teal">
+                    <div class="card-content white-text">
+                        <p>Nimate še uporabniškega računa?</p>
+                    </div>
+                    <div class="card-action center-align">
+                        <a href="{{url('izbira_role')}}" class="btn waves-effect waves-light custom-secondary-btn">
+                            Registracija
+                        </a>
+                    </div>                        
+                </div>
             </div>
         </div>
     </div>

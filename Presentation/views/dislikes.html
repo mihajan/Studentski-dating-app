@@ -13,7 +13,7 @@
                     <div class="card grey">
                         <div class="card-content white-text">
                             <span class="card-title">{{ oseba.ime }}</span>
-                            <p><strong>Uporab ime:</strong> {{ oseba.username }}</p>
+                            <p><strong>Uporabniško ime:</strong> {{ oseba.username }}</p>
                             % for vprasanje, odgovor in oseba.odgovori.items():
                             <p><strong>{{ vprasanje }}</strong> {{ odgovor }}.</p>
                             % end
