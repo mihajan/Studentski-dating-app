@@ -3,7 +3,6 @@ from Presentation.bottleext import *
 from Services.oseba_service import OsebaService
 from Services.auth_service import AuthService
 import os
-#import socket
 
 # Ustvarimo instance servisov, ki jih potrebujemo.
 service = OsebaService()
@@ -12,7 +11,7 @@ auth = AuthService()
 # privzete nastavitve
 SERVER_PORT = int(os.environ.get('BOTTLE_PORT', 8080))
 RELOADER = os.environ.get('BOTTLE_RELOADER', True)
-#HOST = os.environ.get('BOTTLE_HOST', 'localhost')
+
 
 def cookie_required(f):
     """
@@ -25,11 +24,6 @@ def cookie_required(f):
             return f(*args, **kwargs)
         return template("prijava2.html", uporabnik=None, rola=None, napaka="Potrebna je prijava!")
     return decorated
-
-# Določimo statične datoteke
-@route('/static/<filename:path>', name='static')
-def static(filename):
-    return static_file(filename, root='Presentation/static')
 
 @get('/')
 @cookie_required
@@ -44,6 +38,10 @@ def index():
         osebe_dto = service.dobi_brezstika_osebe(username)
         oseba = service.dobi_osebo(username)
         return template('domaca_stran.html', oseba=oseba, osebe=osebe_dto, filter_text=filter_text)
+
+
+#--------------------------------------
+#PRIJAVA IN ODJAVA
 
 @post('/prijava')
 def prijava():
@@ -79,6 +77,24 @@ def odjava():
     response.delete_cookie("rola")
     return template('prijava2.html', uporabnik=None, rola=None, napaka=None)
 
+
+#--------------------------------------
+#REGISTRACIJA
+
+@get('/izbira_role')
+def izbira_role():
+    return template('izbira_role.html')
+
+@post('/izbira_role')
+def izbira_role_post():
+    role = request.forms.get('role')
+    if role == 'admin':
+        redirect(url('admin_auth'))
+    elif role == 'user':
+        redirect(url('register'))
+
+#--------------------------------------
+#registracija uporabnika
 @get('/register')
 def register():
     return template('registracija.html', napaka = None)
@@ -102,18 +118,26 @@ def register_post():
         response.set_cookie("uporabnik", username)
         redirect(url('questions_get'))
 
-@get('/izbira_role')
-def izbira_role():
-    return template('izbira_role.html')
+@get('/questions')
+@cookie_required
+def questions_get():
+    vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
+    return template('vprasanja.html', vprasanja=vprasanja)
 
-@post('/izbira_role')
-def izbira_role_post():
-    role = request.forms.get('role')
-    if role == 'admin':
-        redirect(url('admin_auth'))
-    elif role == 'user':
-        redirect(url('register'))
+@post('/questions')
+@cookie_required
+def questions_post():
+    username = request.get_cookie("uporabnik")
+    vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
+    for vprasanje in vprasanja:
+        odgovor = request.forms.get(f'vprasanje_{vprasanje.id}')
+        if odgovor:
+            service.dodaj_odgovor_uporabnika(username, int(odgovor))
+    
+    redirect(url('index'))
 
+#--------------------------------------
+#registracija admina
 @get('/admin_auth')
 def admin_auth():
     return template('admin_aktivacija.html', napaka = None)
@@ -146,6 +170,10 @@ def admin_register_post():
         response.set_cookie("uporabnik", username)
         redirect(url('urejanje'))
 
+
+#--------------------------------------
+#STRAN ZA ADMINA
+
 @get('/urejanje')
 @cookie_required
 def urejanje():
@@ -157,7 +185,7 @@ def urejanje():
     
     vprasanja = service.dobi_vsa_vprasanja()
     vprasanja_mozni_odgovori = service.dobi_vsa_vprasanja_in_mozne_odgovore()
-    return template('urejanje2.html', vprasanja=vprasanja, vprasanja_mozni_odgovori=vprasanja_mozni_odgovori)
+    return template('urejanje.html', vprasanja=vprasanja, vprasanja_mozni_odgovori=vprasanja_mozni_odgovori)
 
 @post('/dodaj_vprasanje')
 @cookie_required
@@ -181,24 +209,9 @@ def izbrisi_vprasanje():
     service.izbrisi_vprasanje(int(vprasanje_id))
     redirect(url('urejanje'))
 
-@get('/questions')
-@cookie_required
-def questions_get():
-    vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
-    return template('vprasanja.html', vprasanja=vprasanja)
 
-@post('/questions')
-@cookie_required
-def questions_post():
-    username = request.get_cookie("uporabnik")
-    vprasanja = service.dobi_vsa_vprasanja_in_mozne_odgovore()
-    for vprasanje in vprasanja:
-        odgovor = request.forms.get(f'vprasanje_{vprasanje.id}')
-        if odgovor:
-            service.dodaj_odgovor_uporabnika(username, int(odgovor))
-    
-    redirect(url('index'))
-
+#--------------------------------------
+#STRANI ZA UPORABNIKA
 @get('/matchi')
 @cookie_required
 def matchi():
